@@ -7,10 +7,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MSUDTrack.WebApp.Pages
 {
-    public class PrivacyModel : PageModel
+    public class TodayModel : PageModel
     {
         public void OnGet()
         {
+
         }
     }
 }

@@ -7,11 +7,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MSUDTrack.WebApp.Pages
 {
-    public class IndexModel : PageModel
+    public class SettingsModel : PageModel
     {
-        public IActionResult OnGet()
+        public void OnGet()
         {
-            return RedirectToPage("Today");
+
         }
     }
 }
