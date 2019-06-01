@@ -2,19 +2,23 @@
 using Microsoft.EntityFrameworkCore;
 using MSUDTrack.DataModels.Models;
 using System;
+using System.ComponentModel;
 
 namespace MSUDTrack.Services
 {
-    public partial class TrackerDbContext : DbContext
+    public partial class TrackerDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
-        public virtual DbSet<Item> Items { get; set; }
-        public virtual DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public virtual DbSet<ApplicationRole> ApplicationRoles { get; set; }
+        [DisplayName("Authorized Users")]
+        public virtual DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public virtual DbSet<Item> Items { get; set; }
 
         public TrackerDbContext(DbContextOptions<TrackerDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Item>(entity =>
             {
                 entity.ToTable("items");

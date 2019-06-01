@@ -10,11 +10,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MSUDTrack.WebApp.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MSUDTrack.Services;
 using MSUDTrack.DataModels.Models;
+using System.Net;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace MSUDTrack.WebApp
 {
@@ -30,18 +31,57 @@ namespace MSUDTrack.WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
-
-            services.AddDbContext<TrackerDbContext>(options => options.UseNpgsql("Server=127.0.0.1;Port=4011;Database=MSUDTrack;User Id=postgres;Password=123456;"));
+            services.AddDbContext<TrackerDbContext>(options =>
+                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<TrackerDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                var knownProxies = Configuration.GetSection("HttpServer:KnownProxies")
+                                                .GetChildren().ToArray()
+                                                .Select(p => p.Value)
+                                                .ToArray();
+
+                foreach (var proxy in knownProxies)
+                {
+                    options.KnownProxies.Add(IPAddress.Parse(proxy));
+                }
+                options.ForwardedHeaders = ForwardedHeaders.All;
+            });
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Password settings
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 4;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequiredUniqueChars = 0;
+
+                // Lockout settings
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
+                options.Lockout.MaxFailedAccessAttempts = 6;
+                options.Lockout.AllowedForNewUsers = true;
+            });
+
+            //if (_env.IsDevelopment())
+            //{
+            //	services.AddWebpack(
+            //		configFile: "webpack.dev.js",
+            //		publicPath: "/js/react",
+            //		webRoot: "./wwwroot",
+            //		logLevel: WebpackLogLevel.Normal
+            //	);
+            //}
+
+            services.AddRouting(options =>
+            {
+                options.LowercaseUrls = true;
+            });
 
             //services.AddDbContext<ApplicationDbContext>(options =>
             //    options.UseSqlServer(
@@ -52,6 +92,7 @@ namespace MSUDTrack.WebApp
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            //services.AddScoped<UserManager<IdentityUser>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

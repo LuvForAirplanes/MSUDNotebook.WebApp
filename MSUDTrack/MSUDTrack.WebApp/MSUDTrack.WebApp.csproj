@@ -34,7 +34,8 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\..\MSUDTrack.Services\MSUDTrack.Services\MSUDTrack.Services.csproj" />
+    <ProjectReference Include="..\MSUDTrack.DataModels\MSUDTrack.DataModels.csproj" />
+    <ProjectReference Include="..\MSUDTrack.Services\MSUDTrack.Services.csproj" />
   </ItemGroup>
 
 </Project>

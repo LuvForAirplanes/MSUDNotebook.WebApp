@@ -14,9 +14,9 @@ namespace MSUDTrack.DataModels.Models
         /// The users preference of a theme for Candle.
         /// </summary>
         public string Theme { get; set; }
-        ///// <summary>
-        ///// Id of the <see cref="Models.Contact"/> associated with this user.
-        ///// </summary>
+        /// <summary>
+        /// Id of the <see cref="Models.Contact"/> associated with this user.
+        /// </summary>
         //public string ContactId { get; set; }
         ///// <summary>
         ///// Id of the <see cref="Models.LicenseKey"/> associated with this user.
