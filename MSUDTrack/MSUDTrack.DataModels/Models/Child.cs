@@ -20,5 +20,10 @@ namespace MSUDTrack.DataModels.Models
         /// Whether or not this child is active.
         /// </summary>
         public bool IsActive { get; set; }
+
+        /// <summary>
+        /// Indicates whether or not this child is currently being edited.
+        /// </summary>
+        public bool IsSelected { get; set; }
     }
 }
