@@ -1,0 +1,64 @@
+@page
+@model LoginModel
+@using Microsoft.AspNetCore.Hosting
+@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment env;
+@{
+    ViewData["Title"] = "Log in";
+}
+
+<div class="flex-column align-items-center">
+    @if (env.IsStaging())
+    {
+        <div class="ui warning message" style="max-width: 430px;">
+            <div class="ui header">Warning!</div>
+            <p>This demo app is public. You may modify or add to the data but <strong>Please DON'T enter valid personal information!</strong></p>
+            <p>The original data contained herein is randomly generated. </p>
+            <p>The data (and your login) may be deleted or reset at any time.</p>
+        </div>
+    }
+    <div class="ui card raised">
+        <div class="content">
+            <span class="header">Log In</span>
+            <div class="xs-pl-20 xs-pr-20">
+                <form method="post" class="ui form">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="field">
+                        <label asp-for="Input.Username"></label>
+                        <input asp-for="Input.Username" autofocus />
+                        <span asp-validation-for="Input.Username" class="text-danger"></span>
+                    </div>
+                    <div class="field">
+                        <label asp-for="Input.Password"></label>
+                        <input asp-for="Input.Password" />
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+                    <div class="field">
+                        <div class="ui checkbox">
+                            <input asp-for="Input.RememberMe" />
+                            <label asp-for="Input.RememberMe">
+                                @Html.DisplayNameFor(m => m.Input.RememberMe)
+                            </label>
+                        </div>
+                    </div>
+                    <button type="submit" class="ui button">Log in</button>
+                </form>
+                <div>
+                    <a asp-page="./ForgotPassword">Forgot your password?</a>
+                </div>
+                <div>
+                    <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    @if (env.IsStaging())
+    {
+        <div class="ui message" style="max-width: 430px; text-align: center;">
+            <p>Send questions, suggestions or bug reports to: <a href="mailto:support@thettpost.com">support@thettpost.com</a></p>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

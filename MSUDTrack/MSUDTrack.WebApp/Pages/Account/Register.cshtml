@@ -1,8 +1,40 @@
-﻿@page
-@model MSUDTrack.WebApp.Pages.Account.RegisterModel
+@page
+@model RegisterModel
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Register User";
 }
 
-<h1>Register</h1>
+<div class="ui grid">
+    <div class="four wide column">
+        <h2>Create Account</h2>
+        <form asp-route-returnUrl="@Model.ReturnUrl" method="post" class="ui form">
+            <div class="ui section divider"></div>
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="field">
+                <label asp-for="Input.Username"></label>
+                <input asp-for="Input.Username" />
+                <span asp-validation-for="Input.Username" class="text-danger"></span>
+            </div>
+            <div class="field">
+                <label asp-for="Input.Password"></label>
+                <input asp-for="Input.Password" />
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+            <div class="field">
+                <label asp-for="Input.ConfirmPassword"></label>
+                <input asp-for="Input.ConfirmPassword" />
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="field">
+                <label asp-for="Input.Email"></label>
+                <input asp-for="Input.Email" />
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+            <button type="submit" class="ui button ">Register</button>
+        </form>
+    </div>
+</div>
 
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
