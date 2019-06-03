@@ -33,7 +33,7 @@ namespace MSUDTrack.Services
 
                 entity.Property(e => e.Created).HasColumnName("created");
 
-                entity.Property(e => e.LastEdited).HasColumnName("last_edited");
+                entity.Property(e => e.Updated).HasColumnName("updated");
 
                 entity.Property(e => e.Name).HasColumnName("name");
 
@@ -52,7 +52,7 @@ namespace MSUDTrack.Services
 
                 entity.Property(e => e.Created).HasColumnName("created");
 
-                entity.Property(e => e.LastEdited).HasColumnName("last_edited");
+                entity.Property(e => e.Updated).HasColumnName("updated");
 
                 entity.Property(e => e.Name).HasColumnName("name");
 
@@ -71,7 +71,7 @@ namespace MSUDTrack.Services
 
                 entity.Property(e => e.Created).HasColumnName("created");
 
-                entity.Property(e => e.LastEdited).HasColumnName("last_edited");
+                entity.Property(e => e.Updated).HasColumnName("updated");
 
                 entity.Property(e => e.Name).HasColumnName("name");
 
@@ -90,7 +90,7 @@ namespace MSUDTrack.Services
 
                 entity.Property(e => e.Created).HasColumnName("created");
 
-                entity.Property(e => e.LastEdited).HasColumnName("last_edited");
+                entity.Property(e => e.Updated).HasColumnName("updated");
 
                 entity.HasOne(p => p.Child)
                     .WithMany()
