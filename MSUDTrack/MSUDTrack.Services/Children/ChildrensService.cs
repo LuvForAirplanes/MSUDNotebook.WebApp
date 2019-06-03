@@ -1,6 +1,6 @@
 ﻿using MSUDTrack.DataModels.Models;
 
-namespace MSUDTrack.Services.Children
+namespace MSUDTrack.Services
 {
     public class ChildrensService : Repository<Child, string>
     {

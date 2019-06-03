@@ -16,7 +16,6 @@ using MSUDTrack.Services;
 using MSUDTrack.DataModels.Models;
 using System.Net;
 using Microsoft.AspNetCore.HttpOverrides;
-using MSUDTrack.Services.SeedData;
 
 namespace MSUDTrack.WebApp
 {
@@ -94,6 +93,7 @@ namespace MSUDTrack.WebApp
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddScoped<SeedDataService>();
+            services.AddScoped<ChildrensService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

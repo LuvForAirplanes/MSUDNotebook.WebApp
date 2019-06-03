@@ -3,59 +3,95 @@
 @{
     ViewData["Title"] = "Settings";
 }
+<form method="post">
+    <section class="mdl-layout__tab-panel is-active">
+        <div class="page-content flex-column">
+            <div class="flex flex-grow-1 justify-content-center">
+                <select style="margin-top:10px">
+                    <option>Purple - Red</option>
+                </select>
+            </div>
+            <div class="flex flex-grow-1 justify-content-center">
+                <ul class="demo-list-control mdl-list">
+                    @for (int i = 0; i < Model.Children.Count; i++)
+                    {
+                        var age = DateTime.Now.Year - Model.Children[i].Birthday.Year;
+                        // Go back to the year the person was born in case of a leap year
+                        if (Model.Children[i].Birthday.Date > DateTime.Now.AddYears(-age)) { age--; };
+                        <li class="mdl-list__item mdl-list__item--two-line">
+                            <span class="mdl-list__item-primary-content">
+                                <i class="material-icons mdl-list__item-avatar">person</i>
+                                <span>@Model.Children[i].Name</span>
+                                <span class="mdl-list__item-sub-title">@age yr. (@Model.Children[i].Birthday.ToShortDateString())</span>
+                            </span>
+                            <span class="mdl-list__item-secondary-content">
+                                <span class="mdl-list__item-secondary-info">Active</span>
+                                <a class="mdl-list__item-secondary-action">
+                                    <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="list-checkbox-@i" oninput="document.getElementById('@Model.Children[i].Id').click()">
+                                        <input type="checkbox" id="list-checkbox-@i" class="mdl-checkbox__input" checked="@(Model.Children[i].IsActive ? "checked" : "")" />
+                                    </label>
+                                </a>
+                            </span>
+                        </li>
+                        <button id="@Model.Children[i].Id" class="mdl-button close" style="display: none;" asp-page-handler="DeleteChild" asp-route-id="@Model.Children[i].Id">Cancel</button>
+                    }
+                    <li class="mdl-list__item mdl-list__item--two-line">
+                        <input type="button" class="mdl-button mdl-js-button mdl-button--primary add-button" onclick="showDiag()" asp-page-handler="" value="Add Person" />
+                    </li>
+                </ul>
+            </div>
+            <div class="flex flex-grow-1 justify-content-center">
+                <p class="settings-paragraphs">
+                    This app is a beta app intended to be used as a nutritional tracking app for MSUD patients.
+                    <br />
+                    <br />
+                    For you developers, this is an ASP.Net Core WebApp with Material Design Lite styling. I'm using a postgresql database with Npgsql connector.
+                </p>
+            </div>
+        </div>
 
-<section class="mdl-layout__tab-panel is-active">
-    <div class="page-content flex-column">
-        <div class="flex flex-grow-1 justify-content-center">
-            <select style="margin-top:10px">
-                <option>Purple - Red</option>
-            </select>
-        </div>
-        <div class="flex flex-grow-1 justify-content-center">
-            <ul class="demo-list-control mdl-list">
-                <li class="mdl-list__item mdl-list__item--two-line">
-                    <span class="mdl-list__item-primary-content">
-                        <i class="material-icons mdl-list__item-avatar">person</i>
-                        <span>Geneva</span>
-                        <span class="mdl-list__item-sub-title">7 yr. (5/9/2011)</span>
-                    </span>
-                    <span class="mdl-list__item-secondary-content">
-                        <span class="mdl-list__item-secondary-info">Active</span>
-                        <a class="mdl-list__item-secondary-action">
-                            <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="list-checkbox-1">
-                                <input type="checkbox" id="list-checkbox-1" class="mdl-checkbox__input" checked />
-                            </label>
-                        </a>
-                    </span>
-                </li>
-                <li class="mdl-list__item mdl-list__item--two-line">
-                    <span class="mdl-list__item-primary-content">
-                        <i class="material-icons mdl-list__item-avatar">person</i>
-                        <span>Adalea</span>
-                        <span class="mdl-list__item-sub-title">5 yr. (5/9/2014)</span>
-                    </span>
-                    <span class="mdl-list__item-secondary-content">
-                        <a class="mdl-list__item-secondary-action">
-                            <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="list-checkbox-2">
-                                <input type="checkbox" id="list-checkbox-2" class="mdl-checkbox__input" checked />
-                            </label>
-                        </a>
-                    </span>
-                </li>
-                <li class="mdl-list__item mdl-list__item--two-line">
-                    <button class="mdl-button mdl-js-button mdl-button--primary add-button">
-                        Add Person
-                    </button>
-                </li>
-            </ul>
-        </div>
-        <div class="flex flex-grow-1 justify-content-center">
-            <p class="settings-paragraphs">
-                This app is a beta app intended to be used as a nutritional tracking app for MSUD patients.
-                <br />
-                <br />
-                For you developers, this is an ASP.Net Core WebApp with Material Design Lite styling. I'm using a postgresql database with Npgsql connector.
-            </p>
-        </div>
-    </div>
-</section>
+        <dialog class="mdl-dialog">
+            <h4 class="mdl-dialog__title">Add Child</h4>
+            <div class="mdl-dialog__content">
+                <p>
+                    Enter the information below to add a child. All fields must be filled.
+                </p>
+                <input type="hidden" asp-for="NewChild.Id" />
+                <input type="hidden" asp-for="NewChild.IsActive" />
+                <input type="hidden" asp-for="NewChild.IsSelected" />
+                <input type="hidden" asp-for="NewChild.Created" />
+                <input type="hidden" asp-for="NewChild.Updated" />
+                <div>
+                    <label>Name</label>
+                    <input asp-for="NewChild.Name" />
+                </div>
+                <div>
+                    <label>Birthday</label>
+                    <input asp-for="NewChild.Birthday" />
+                </div>
+            </div>
+            <div class="mdl-dialog__actions">
+                <button class="mdl-button" asp-page-handler="AddChild">Save</button>
+                <button type="button" class="mdl-button close">Cancel</button>
+            </div>
+        </dialog>
+    </section>
+</form>
+
+@section Scripts  {
+    <script>
+        var dialog = document.querySelector('dialog');
+
+        if (!dialog.showModal) {
+            dialogPolyfill.registerDialog(dialog);
+        }
+
+        dialog.querySelector('.close').addEventListener('click', function () {
+            dialog.close();
+        });
+
+        function showDiag() {
+            dialog.showModal();
+        }
+    </script>
+}

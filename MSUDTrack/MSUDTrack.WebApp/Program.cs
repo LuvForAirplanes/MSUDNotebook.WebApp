@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Hosting.WindowsServices;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using MSUDTrack.Services.SeedData;
+using MSUDTrack.Services;
 
 namespace MSUDTrack.WebApp
 {
