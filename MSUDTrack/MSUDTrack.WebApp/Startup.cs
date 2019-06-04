@@ -92,8 +92,11 @@ namespace MSUDTrack.WebApp
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            services.AddScoped<SeedDataService>();
             services.AddScoped<ChildrensService>();
+            services.AddScoped<FoodsService>();
+            services.AddScoped<PeriodsService>();
+            services.AddScoped<RecordsService>();
+            services.AddScoped<SeedDataService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
