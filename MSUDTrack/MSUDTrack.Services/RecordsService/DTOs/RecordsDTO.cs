@@ -5,6 +5,9 @@ using System.Text;
 
 namespace MSUDTrack.Services.DTOs
 {
+    /// <summary>
+    ///This is junk!!! Do NOT use!
+    /// </summary>
     public class RecordsDTO
     {
         public List<PeriodDTO> Periods = new List<PeriodDTO>();

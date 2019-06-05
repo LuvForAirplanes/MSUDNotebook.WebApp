@@ -14,7 +14,7 @@ namespace MSUDTrack.WebApp.MappingProfiles
             return new RecordEdit()
             {
                 Id = source.Id,
-                FoodId = source.FoodId
+                Food = source.Food
             };
         }
 
@@ -22,21 +22,21 @@ namespace MSUDTrack.WebApp.MappingProfiles
         {
             return new Record()
             {
-                FoodId = source.FoodId,
+                Food = source.Food,
                 Id = source.Id
             };
         }
 
         public void Map(RecordEdit source, Record target)
         {
-            target.FoodId = source.FoodId;
+            target.Food = source.Food;
             target.Id = source.Id;
         }
 
         public void Map(Record source, RecordEdit target)
         {
             target.Id = source.Id;
-            target.FoodId = source.FoodId;
+            target.Food = source.Food;
         }
     }
 }

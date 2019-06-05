@@ -16,6 +16,8 @@ using MSUDTrack.Services;
 using MSUDTrack.DataModels.Models;
 using System.Net;
 using Microsoft.AspNetCore.HttpOverrides;
+using SolidMapper;
+using System.Reflection;
 
 namespace MSUDTrack.WebApp
 {
@@ -97,6 +99,9 @@ namespace MSUDTrack.WebApp
             services.AddScoped<PeriodsService>();
             services.AddScoped<RecordsService>();
             services.AddScoped<SeedDataService>();
+            services.AddSolidMapper(new Assembly[] {
+                typeof(Startup).GetTypeInfo().Assembly
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

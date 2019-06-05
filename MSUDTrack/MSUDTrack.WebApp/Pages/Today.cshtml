@@ -31,17 +31,17 @@
         </div>
         <div class="flex flex-grow-1 justify-content-center">
             <ul class="mdl-list">
-                @for (int i = 0; i < Model.Records.Periods.Count; i++)
+                @for (int i = 0; i < Model.TodaysLog.Periods.Count; i++)
                 {
                     <li class="mdl-list__item period">
                         <span class="mdl-list__item-primary-content">
-                            @Model.Records.Periods[i].Period.Name
+                            @Model.TodaysLog.Periods[i].Period.Name
                         </span>
                     </li>
-                    @for(int ii = 0; ii < Model.Records.Periods[i].Records.Count; ii++)
+                    @for(int ii = 0; ii < Model.TodaysLog.Periods[i].Records.Count; ii++)
                     {
                         <li class="mdl-list__item">
-                            <input type="text" asp-for="Records.Periods[i].Records[ii].FoodId"/>
+                            @*<input type="text" asp-for="TodaysLog.Periods[i].Records[ii]"/>*@
                             
                             @*<span class="mdl-list__item-primary-content">
                                 @((await foodsService.GetByIdAsync(record.FoodId)).Name)
