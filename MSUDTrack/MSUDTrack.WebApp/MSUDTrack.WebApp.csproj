@@ -34,6 +34,7 @@
 
 
   <ItemGroup>
+    <ProjectReference Include="..\..\SolidMapper\SolidMapper\SolidMapper\SolidMapper.csproj" />
     <ProjectReference Include="..\MSUDTrack.DataModels\MSUDTrack.DataModels.csproj" />
     <ProjectReference Include="..\MSUDTrack.Services\MSUDTrack.Services.csproj" />
   </ItemGroup>
