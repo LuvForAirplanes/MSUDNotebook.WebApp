@@ -38,9 +38,7 @@ namespace MSUDTrack.WebApp
                 var scope = WebHostInstance.Services.CreateScope();
 
                 var seedDataService = scope.ServiceProvider.GetService<SeedDataService>();
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                 seedDataService.SeedPeriodsAsync(); //Don't hold up the startup process. Seeding will catch up later.
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
                 if (isService && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                     WebHostInstance.RunAsService();
@@ -49,13 +47,7 @@ namespace MSUDTrack.WebApp
             }
             catch (Exception e)
             {
-                //logger.Error(e, "Stopped program because of exception");
                 throw;
-            }
-            finally
-            {
-                // Ensure to flush and stop internal timers/threads before application-exit (Avoid segmentation fault on Linux)
-                //NLog.LogManager.Shutdown();
             }
         }
 

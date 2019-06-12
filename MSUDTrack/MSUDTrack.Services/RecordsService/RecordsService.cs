@@ -44,7 +44,13 @@ namespace MSUDTrack.Services
         {
             var child = _childrensService.Get().Where(c => c.IsSelected).FirstOrDefault();
             var period = await _periodsService.Get().Where(p => p.Id == periodId).FirstOrDefaultAsync();
-            var records = Get().Where(r => r.ChildId == child.Id).Where(r => r.PeriodId == period.Id).ToList();
+            var records = new List<Record>();
+
+            //I'm not sure why the where's don't work right...?
+            if (Get().Count() > 0)
+            {
+                records = Get().Where(r => r.ChildId == child.Id).Where(r => r.PeriodId == period.Id).ToList();
+            }
 
             return records;
         }
