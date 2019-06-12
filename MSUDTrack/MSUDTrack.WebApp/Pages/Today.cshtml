@@ -41,7 +41,7 @@
                     @for(int ii = 0; ii < Model.TodaysLog.Periods[i].Records.Count; ii++)
                     {
                         <li class="mdl-list__item">
-                            @*<input type="text" asp-for="TodaysLog.Periods[i].Records[ii]"/>*@
+                           <input type="text" asp-for="TodaysLog.Periods[i].Records[ii].Food.Name"/>
                             
                             @*<span class="mdl-list__item-primary-content">
                                 @((await foodsService.GetByIdAsync(record.FoodId)).Name)
