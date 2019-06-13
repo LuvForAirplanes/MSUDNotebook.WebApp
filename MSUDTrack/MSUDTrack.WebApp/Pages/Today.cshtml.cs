@@ -14,14 +14,18 @@ namespace MSUDTrack.WebApp.Pages
     {
         private readonly RecordsService _recordsService;
         private readonly PeriodsService _periodsService;
+        private readonly FoodsService _foodsService;
 
-        public TodayModel(RecordsService recordsService, PeriodsService periodsService)
+        public TodayModel(RecordsService recordsService, PeriodsService periodsService, FoodsService foodsService)
         {
             _recordsService = recordsService;
             _periodsService = periodsService;
+            _foodsService = foodsService;
         }
 
         public TodayDTO TodaysLog { get; set; } = new TodayDTO();
+
+        public List<Food> Foods { get; set; }
 
         public async Task OnGetAsync()
         {
@@ -35,6 +39,8 @@ namespace MSUDTrack.WebApp.Pages
                     Records = await _recordsService.GetRecordsByPeriodAsync(period.Id)
                 });
             }
+
+            Foods = await _foodsService.ListAsync();
         }
     }
 

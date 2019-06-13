@@ -28,7 +28,7 @@ namespace MSUDTrack.Services
 
             foreach (var period in periods)
             {
-                var records = Get().Where(r => r.ChildId == child.Id).Where(r => r.PeriodId == period.Id).ToList();
+                var records = Get().Where(r => r.ChildId == child.Id).Where(r => r.PeriodId == period.Id).Include(r => r.Food).ToList();
 
                 report.Periods.Add(new PeriodDTO()
                 {
@@ -49,7 +49,7 @@ namespace MSUDTrack.Services
             //I'm not sure why the where's don't work right...?
             if (Get().Count() > 0)
             {
-                records = Get().Where(r => r.ChildId == child.Id).Where(r => r.PeriodId == period.Id).ToList();
+                records = Get().Where(r => r.ChildId == child.Id).Where(r => r.PeriodId == period.Id).Include(r => r.Food).ToList();
             }
 
             return records;
