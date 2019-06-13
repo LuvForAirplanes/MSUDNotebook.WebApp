@@ -6,11 +6,8 @@ $("select, input").on("input", function (e) {
     var elements = $("#" + e.target.id);
 
     var record = {
-        FoodId: elements[0].value,
-        Food: {
-            Id: elements[0].value,
-            ProteinGrams: elements[1].value
-        }
+        Id: e.target.id,
+        FoodId: elements[0].value
     };
 
     $.ajax({

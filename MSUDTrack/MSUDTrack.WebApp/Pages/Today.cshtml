@@ -52,8 +52,12 @@
 							        }
 						        </div>
 					        </div>*@
-                            <select id="@Model.TodaysLog.Periods[i].Records[ii].Id" asp-items="@(new SelectList(Model.Foods,"Id","Name"))">
-                                <option disabled selected value="@Model.TodaysLog.Periods[i].Records[ii].FoodId">@Model.TodaysLog.Periods[i].Records[ii].Food.Name</option>
+                            @{
+                                var a = Model.TodaysLog.Periods[i].Records[ii];
+
+                            }
+                            <select id="@Model.TodaysLog.Periods[i].Records[ii].Id" value="" asp-items="@(new SelectList(Model.Foods,"Id","Name"))">
+                                <option selected disabled value="@Model.TodaysLog.Periods[i].Records[ii].FoodId">@Model.TodaysLog.Periods[i].Records[ii].Food.Name</option>
                             </select>
                            <input type="text" id="@Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].Food.ProteinGrams"/>
                         </li>
