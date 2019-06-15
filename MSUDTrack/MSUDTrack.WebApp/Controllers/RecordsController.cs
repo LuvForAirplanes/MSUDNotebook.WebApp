@@ -40,5 +40,16 @@ namespace MSUDTrack.WebApp.Controllers
             else
                 return await _recordsService.CreateAsync(record);
         }
+
+        // DELETE: api/Foods/5
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Record>> DeleteFood(string id)
+        {
+            var recordToDelete = await _recordsService.GetByIdAsync(id);
+
+            await _recordsService.DeleteAsync(id);
+
+            return recordToDelete;
+        }
     }
 }
