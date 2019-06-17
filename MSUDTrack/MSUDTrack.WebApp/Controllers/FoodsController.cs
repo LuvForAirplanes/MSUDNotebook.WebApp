@@ -29,8 +29,19 @@ namespace MSUDTrack.WebApp.Controllers
         {
             if (await _foodsService.GetByIdAsync(food.Id) != null)
             {
-                await _foodsService.UpdateAsync(food, food.Id);
-                return CreatedAtAction("GetFood", new { id = food.Id }, food);
+                var existingFood = await _foodsService.GetByIdAsync(food.Id);
+                var newFood = new Food()
+                {
+                    Id = food.Id,
+                    Created = existingFood.Created,
+                    LeucineMilligrams = food.LeucineMilligrams,
+                    Name = existingFood.Name,
+                    ProteinGrams = food.ProteinGrams,
+                    Updated = DateTime.Now
+                };
+
+                await _foodsService.UpdateAsync(newFood, newFood.Id);
+                return CreatedAtAction("GetFood", new { id = newFood.Id }, newFood);
             }
             else
             {

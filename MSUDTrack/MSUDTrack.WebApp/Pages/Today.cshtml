@@ -40,27 +40,27 @@
                     </li>
                     @for(int ii = 0; ii < Model.TodaysLog.Periods[i].Records.Count; ii++)
                     {
-                        <li class="mdl-list__item">
-                            @*<div class="ui search selection dropdown">
-						        <input type="hidden" id="@Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].FoodId" />
-						        <i class="dropdown icon"></i>
-						        <div class="default text">Select food</div>
-						        <div class="menu">
-							        @foreach (var food in Model.Foods)
-							        {
-								        <div class="item" data-value="@food.Id">@food.Name</div>
-							        }
-						        </div>
-					        </div>*@
-                            @{
-                                var a = Model.TodaysLog.Periods[i].Records[ii];
-
-                            }
-                            <select id="@Model.TodaysLog.Periods[i].Records[ii].Id" value="" asp-items="@(new SelectList(Model.Foods,"Id","Name"))">
-                                <option selected disabled value="@Model.TodaysLog.Periods[i].Records[ii].FoodId">@Model.TodaysLog.Periods[i].Records[ii].Food.Name</option>
-                            </select>
-                           <input type="text" id="@Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].Food.ProteinGrams"/>
-                        </li>
+                <li class="mdl-list__item">
+                    @*<div class="ui search selection dropdown">
+                <input type="hidden" id="@Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].FoodId" />
+                <i class="dropdown icon"></i>
+                <div class="default text">Select food</div>
+                <div class="menu">
+                    @foreach (var food in Model.Foods)
+                    {
+                        <div class="item" data-value="@food.Id">@food.Name</div>
+                    }
+                </div>
+            </div>*@
+                    @{
+                        var a = Model.TodaysLog.Periods[i].Records[ii];
+                    }
+                    <select class="food-select @Model.TodaysLog.Periods[i].Records[ii].Id" asp-items="@(new SelectList(Model.Foods,"Id","Name"))">
+                        <option selected disabled value="@Model.TodaysLog.Periods[i].Records[ii].FoodId">@Model.TodaysLog.Periods[i].Records[ii].Food.Name</option>
+                    </select>
+                    <input type="text" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].Food.ProteinGrams" />
+                    <input type="text" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].Food.LeucineMilligrams" />
+                </li>
                     }
                 }
             </ul>

@@ -1,12 +1,13 @@
 ﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 // for details on configuring this project to bundle and minify static web assets.
 
-$("select, input").on("input", function (e) {
+$(".food-select").on("input", function (e) {
     //here goes the api post
-    var elements = $("#" + e.target.id);
+    var targetId = $(this).attr('class').split(' ')[1];
+    var elements = $("." + targetId);
 
     var record = {
-        Id: e.target.id,
+        Id: targetId,
         FoodId: elements[0].value
     };
 
@@ -16,5 +17,35 @@ $("select, input").on("input", function (e) {
         data: JSON.stringify(record),
         contentType: 'application/json; charset=utf-8',
         dataType: 'json'
+    });
+});
+
+$(".nutri-inputs").on("input", function (e) {
+    //here goes the api post
+    var targetId = $(this).attr('class').split(' ')[1];
+    var elements = $("." + targetId);
+
+    var food = {
+        Id: elements[0].value,
+        ProteinGrams: elements[1].value,
+        LeucineMilligrams: elements[2].value
+    };
+
+    $.ajax({
+        type: 'POST',
+        url: '/api/Foods',
+        data: JSON.stringify(food),
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json'
+    });
+});
+
+$(".delete-button").on("click", function (e) {
+    //here goes the api post
+    var targetId = $(this).attr('class').split(' ')[1];
+
+    $.ajax({
+        type: 'DELETE',
+        url: '/api/Records/' + targetId
     });
 });
