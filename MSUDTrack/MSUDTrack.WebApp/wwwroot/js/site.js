@@ -48,4 +48,6 @@ $(".delete-button").on("click", function (e) {
         type: 'DELETE',
         url: '/api/Records/' + targetId
     });
+
+    location.reload();
 });

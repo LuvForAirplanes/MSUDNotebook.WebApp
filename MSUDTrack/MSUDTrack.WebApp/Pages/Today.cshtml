@@ -19,6 +19,14 @@
     .mdl-list {
         width:350px;
     }
+
+    .nutri-inputs {
+        width:90px;
+    }
+
+    .material-icons {
+        color:red !important;
+    }
 </style>
 
 <section class="mdl-layout__tab-panel is-active">
@@ -60,6 +68,9 @@
                     </select>
                     <input type="text" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].Food.ProteinGrams" />
                     <input type="text" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].Food.LeucineMilligrams" />
+                    <button class="delete-button @Model.TodaysLog.Periods[i].Records[ii].Id mdl-button mdl-js-button mdl-button--icon">
+                        <i class="material-icons">delete</i>
+                    </button>
                 </li>
                     }
                 }
