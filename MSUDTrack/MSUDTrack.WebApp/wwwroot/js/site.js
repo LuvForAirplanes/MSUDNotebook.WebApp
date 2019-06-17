@@ -51,3 +51,12 @@ $(".delete-button").on("click", function (e) {
 
     location.reload();
 });
+
+$("#child-select").on("input", function (e) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/Children/' + $('#' + e.target.id).find(":selected").text()
+    });
+
+    location.reload();
+});
