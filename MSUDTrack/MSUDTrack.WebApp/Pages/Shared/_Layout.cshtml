@@ -2,100 +2,98 @@
 
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - MSUDTrack</title>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>@ViewData["Title"] - MSUDTrack</title>
 
-    <environment include="Development">
-        <link rel="stylesheet" href="~/css/flex.css" />
-        <link rel="stylesheet" href="~/css/material_icons.css" />
-        <link rel="stylesheet" href="~/css/mdl_indigo-pink.min.css" />
-    </environment>
-    <environment exclude="Development">
-        <link rel="stylesheet" href="~/css/flex.css" />
-        <link rel="stylesheet" href="~/css/material_icons.css" />
-        <link rel="stylesheet" href="~/css/mdl_indigo-pink.min.css" />
-    </environment>
-    <link rel="stylesheet" href="~/css/site.css" />
+        <environment include="Development">
+            <link rel="stylesheet" href="~/css/flex.css" />
+            <link rel="stylesheet" href="~/css/material_icons.css" />
+            <link rel="stylesheet" href="~/css/mdl_indigo-pink.min.css" />
+        </environment>
+        <environment exclude="Development">
+            <link rel="stylesheet" href="~/css/flex.css" />
+            <link rel="stylesheet" href="~/css/material_icons.css" />
+            <link rel="stylesheet" href="~/css/mdl_indigo-pink.min.css" />
+        </environment>
+        <link rel="stylesheet" href="~/css/site.css" />
 
-    <style>
-        .name {
-            margin-left: 10px;
+        <style>
+            .name {
+                margin-left: 10px;
+            }
+
+            .demo-list-control {
+                width: 300px;
+            }
+
+            .add-button {
+                width: 300pt;
+                text-align: center;
+            }
+
+            .settings-paragraphs {
+                width: 300px;
+                text-align: center;
+            }
+
+            .name-title {
+                margin-bottom: 0;
+            }
+
+            .leucine-title {
+                margin-top: 0;
+            }
+        </style>
+    </head>
+    <body>
+        @{ 
+            var data = dbContext.Children.Where(c => c.IsActive).ToList();
         }
-
-        .demo-list-control {
-            width: 300px;
-        }
-
-        .add-button {
-            width: 300pt;
-            text-align: center;
-        }
-
-        .settings-paragraphs {
-            width: 300px;
-            text-align: center;
-        }
-
-        .name-title {
-            margin-bottom: 0;
-        }
-
-        .leucine-title {
-            margin-top: 0;
-        }
-    </style>
-</head>
-<body>
-    <header></header>
-    @{ 
-        var data = dbContext.Children.Where(c => c.IsActive).ToList();
-    }
-    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-tabs">
-        <header class="mdl-layout__header">
-            <div class="mdl-layout__header-row">
-                <span class="mdl-layout-title">MSUD Track</span>
-                <div class="mdl-select">
-                    <select class="mdl-select-text" id="child-select">
-                        <option selected disabled value="@(data.FirstOrDefault(c => c.IsSelected).Id)">@(data.FirstOrDefault(c => c.IsSelected).Name)</option>
-                        @for (int i = 0; i < data.Count; i++)
-                        {
-                            <option value="@i">@data[i].Name</option>
-                        }
-                    </select>
-                    <span class="mdl-select-highlight"></span>
-                    <span class="mdl-select-bar"></span>
-                    <!--<label class="select-label">Child</label>-->
+        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-tabs">
+            <header class="mdl-layout__header">
+                <div class="mdl-layout__header-row">
+                    <span class="mdl-layout-title">MSUD Track</span>
+                    <div class="mdl-select">
+                        <select class="mdl-select-text" id="child-select">
+                            <option selected disabled value="@(data.FirstOrDefault(c => c.IsSelected).Id)">@(data.FirstOrDefault(c => c.IsSelected).Name)</option>
+                            @for (int i = 0; i < data.Count; i++)
+                            {
+                                <option value="@i">@data[i].Name</option>
+                            }
+                        </select>
+                        <span class="mdl-select-highlight"></span>
+                        <span class="mdl-select-bar"></span>
+                    </div>
                 </div>
-            </div>
-            <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
-                @{
-                    var rv = ViewContext.RouteData.Values.FirstOrDefault().Value.ToString();
-                }
+                <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+                    @{
+                        var rv = ViewContext.RouteData.Values.FirstOrDefault().Value.ToString();
+                    }
 
-                <a href="Today" class="mdl-layout__tab @(rv == "/Today" ? "is-active" : "")">Today</a>
-                <a href="History" class="mdl-layout__tab @(rv == "/History" ? "is-active" : "")">History</a>
-                <a href="Settings" class="mdl-layout__tab @(rv == "/Settings" ? "is-active" : "")">Settings</a>
-            </div>
-        </header>
-        <main class="mdl-layout__content">
-            @RenderBody()
-        </main>
-    </div>
+                    <a href="Today" class="mdl-layout__tab @(rv == "/Today" ? "is-active" : "")">Today</a>
+                    <a href="History" class="mdl-layout__tab @(rv == "/History" ? "is-active" : "")">History</a>
+                    <a href="Settings" class="mdl-layout__tab @(rv == "/Settings" ? "is-active" : "")">Settings</a>
+                </div>
+            </header>
+            <main class="mdl-layout__content">
+                @RenderBody()
+            </main>
+        </div>
 
-    <footer></footer>
+        <footer></footer>
 
-    <environment include="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/js/material.min.js"></script>
-    </environment>
-    <environment exclude="Development">
-        <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        <script src="~/js/material.min.js"></script>
-    </environment>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+        <environment include="Development">
+            <script src="~/lib/jquery/dist/jquery.js"></script>
+            <script src="~/js/material.min.js"></script>
+        </environment>
+        <environment exclude="Development">
+            <script src="~/lib/jquery/dist/jquery.min.js"></script>
+            <script src="~/js/material.min.js"></script>
+        </environment>
+        <script src="~/js/site.js" asp-append-version="true"></script>
 
-    @RenderSection("Scripts", required: false)
-</body>
+        @RenderSection("Scripts", required: false)
+    </body>
 </html>
