@@ -1,10 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MSUDTrack.DataModels.Models;
 using MSUDTrack.Services.DTOs;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MSUDTrack.Services
@@ -20,24 +18,24 @@ namespace MSUDTrack.Services
             _childrensService = childrensService;
         }
 
-        public async Task<RecordsDTO> GetTodaysRecordsByCurrentChildAsync()
+        //not currently in use
+        public async Task<TodayDTO> GetTodaysRecordsByCurrentChildAsync()
         {
-            var child = _childrensService.Get().Where(c => c.IsSelected).FirstOrDefault();
             var periods = await _periodsService.ListAsync();
-            var report = new RecordsDTO();
+            var log = new TodayDTO();
 
             foreach (var period in periods)
             {
-                var records = Get().Where(r => r.ChildId == child.Id).Where(r => r.PeriodId == period.Id).Include(r => r.Food).ToList();
-
-                report.Periods.Add(new PeriodDTO()
+                log.Periods.Add(new PeriodDTO()
                 {
                     Period = period,
-                    Records = records
+                    Records = await GetRecordsByPeriodAsync(period.Id)
                 });
             }
 
-            return report;
+            log.Child = _childrensService.Get().Where(c => c.IsSelected).FirstOrDefault();
+
+            return log;
         }
 
         public async Task<List<Record>> GetRecordsByPeriodAsync(string periodId)

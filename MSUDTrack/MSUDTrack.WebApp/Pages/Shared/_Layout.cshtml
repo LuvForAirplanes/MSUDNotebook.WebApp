@@ -57,7 +57,7 @@
                     <span class="mdl-layout-title">MSUD Track</span>
                     <div class="mdl-select">
                         <select class="mdl-select-text" id="child-select">
-                            <option selected disabled value="@(data.FirstOrDefault(c => c.IsSelected).Id)">@(data.FirstOrDefault(c => c.IsSelected).Name)</option>
+                            <option class="hidden" selected disabled value="@(data.FirstOrDefault(c => c.IsSelected).Id)">@(data.FirstOrDefault(c => c.IsSelected).Name)</option>
                             @for (int i = 0; i < data.Count; i++)
                             {
                                 <option value="@i">@data[i].Name</option>

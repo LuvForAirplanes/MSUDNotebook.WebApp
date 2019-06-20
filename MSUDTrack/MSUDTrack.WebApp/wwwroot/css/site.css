@@ -118,3 +118,7 @@ select > option {
     opacity: 0.5;
     color: white;
 }
+
+.hidden {
+    display:none;
+}

@@ -29,30 +29,8 @@ namespace MSUDTrack.WebApp.Pages
 
         public async Task OnGetAsync()
         {
-            var periods = await _periodsService.ListAsync();
-
-            foreach (var period in periods)
-            {
-                TodaysLog.Periods.Add(new PeriodDTO()
-                {
-                    Period = period,
-                    Records = await _recordsService.GetRecordsByPeriodAsync(period.Id)
-                });
-            }
-
+            TodaysLog = await _recordsService.GetTodaysRecordsByCurrentChildAsync();
             Foods = await _foodsService.ListAsync();
         }
-    }
-
-    public class TodayDTO
-    {
-        public List<PeriodDTO> Periods { get; set; } = new List<PeriodDTO>();
-    }
-
-    public class PeriodDTO
-    {
-        public Period Period = new Period();
-
-        public List<Record> Records { get; set; }
     }
 }
