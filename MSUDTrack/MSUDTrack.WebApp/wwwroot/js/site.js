@@ -64,4 +64,16 @@ $(document).ready(function () {
             location.reload();
         });
     });
+
+    $(".add-button").on("click", function (e) {
+        //here goes the api post
+        var targetId = $(this).attr('class').split(' ')[1];
+
+        $.ajax({
+            type: 'PUT',
+            url: '/api/Records/' + targetId
+        }).done(function () {
+            location.reload();
+        });
+    });
 });

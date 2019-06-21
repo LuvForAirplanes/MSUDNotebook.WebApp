@@ -11,10 +11,12 @@ namespace MSUDTrack.WebApp.Controllers
     public class RecordsController : ControllerBase
     {
         private readonly RecordsService _recordsService;
+        private readonly ChildrensService _childrensService;
 
-        public RecordsController(RecordsService recordsService)
+        public RecordsController(RecordsService recordsService, ChildrensService childrensService)
         {
             _recordsService = recordsService;
+            _childrensService = childrensService;
         }
 
         // POST: api/Records
@@ -50,6 +52,20 @@ namespace MSUDTrack.WebApp.Controllers
             await _recordsService.DeleteAsync(id);
 
             return recordToDelete;
+        }
+
+        // PUT: api/Foods/5
+        [HttpPut("{periodId}")]
+        public async Task<ActionResult<Record>> PutFood(string periodId)
+        {
+            return await _recordsService.CreateAsync(new Record()
+            {
+                Id = System.Guid.NewGuid().ToString(),
+                PeriodId = periodId,
+                ChildId = _childrensService.GetCurrentChild().Id,
+                Created = DateTime.Now,
+                FoodId = "defaultFood"
+            });
         }
     }
 }
