@@ -34,19 +34,17 @@ namespace MSUDTrack.WebApp.Controllers
                 {
                     Id = food.Id,
                     Created = existingFood.Created,
-                    LeucineMilligrams = food.LeucineMilligrams,
+                    LeucineMilligrams = (int.Parse(food.ProteinGrams) * 100).ToString(),
                     Name = existingFood.Name,
                     ProteinGrams = food.ProteinGrams,
                     Updated = DateTime.Now
                 };
 
-                await _foodsService.UpdateAsync(newFood, newFood.Id);
-                return CreatedAtAction("GetFood", new { id = newFood.Id }, newFood);
+                return await _foodsService.UpdateAsync(newFood, newFood.Id); 
             }
             else
             {
-                await _foodsService.CreateAsync(food);
-                return CreatedAtAction("GetFood", new { id = food.Id }, food);
+                return await _foodsService.CreateAsync(food);
             }
         }
 

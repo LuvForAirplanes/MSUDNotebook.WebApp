@@ -35,12 +35,18 @@ $(document).ready(function () {
             LeucineMilligrams: elements[2].value
         };
 
+        if (food.ProteinGrams === "")
+            return;
+
         $.ajax({
             type: 'POST',
             url: '/api/Foods',
             data: JSON.stringify(food),
             contentType: 'application/json; charset=utf-8',
-            dataType: 'json'
+            dataType: 'json',
+            success: function (data) {
+                elements[2].value = data.leucineMilligrams;
+            }
         });
     });
 
