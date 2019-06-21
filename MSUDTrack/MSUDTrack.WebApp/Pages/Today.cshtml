@@ -5,76 +5,82 @@
     ViewData["Title"] = "Today";
 }
 
-<style>
-    .period {
-        background-color:grey;
-    }
+@section  Styles {
+    <style>
+        .period {
+            background-color:grey;
+        }
 
-    .mdl-list__item {
-        min-height: 0 !important;
-        padding-top: 10px;
-        padding-bottom: 10px;
-    }
+        .mdl-list__item {
+            min-height: 0 !important;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
 
-    .mdl-list {
-        width:350px;
-    }
+        .mdl-list {
+            width:350px;
+        }
 
-    .nutri-inputs {
-        width:90px;
-    }
+        .nutri-inputs {
+            width:90px;
+        }
 
-    .material-icons {
-        color:red !important;
-    }
-</style>
+        .material-icons {
+            color:red !important;
+        }
 
-<section class="mdl-layout__tab-panel is-active">
-    <div class="page-content flex-column">
-        <div class="flex flex-grow-1 justify-content-center">
-            <div class="align-text-center">
-                <h3 class="name-title">@Model.TodaysLog.Child.Name</h3>
-                <h4 class="leucine-title">Today 55mg :)</h4>
+        .add-button {
+            width: 100%;
+            height: 40px;
+            background: none;
+            border: none;
+        }
+    </style>
+}
+@{
+    var micah = "";
+
+}
+<form method="post">
+    <section class="mdl-layout__tab-panel is-active">
+        <div class="page-content flex-column">
+            <div class="flex flex-grow-1 justify-content-center">
+                <div class="align-text-center">
+                    @{
+                        var leucineMG = Model.TodaysLog.Periods.Sum(p => p.Records.Sum(r => int.Parse(r.Food.LeucineMilligrams)));
+                    }
+                    <h3 class="name-title">@Model.TodaysLog.Child.Name</h3>
+                    <h4 class="leucine-title">Today @(leucineMG)mg @(leucineMG < 300 ? ":)" : ":(")</h4>
+                </div>
+            </div>
+            <div class="flex flex-grow-1 justify-content-center">
+                <ul class="mdl-list">
+                    @for (int i = 0; i < Model.TodaysLog.Periods.Count; i++)
+                    {
+                        <li class="mdl-list__item period">
+                            <span class="mdl-list__item-primary-content">
+                                @Model.TodaysLog.Periods[i].Period.Name
+                            </span>
+                        </li>
+                        @for (int ii = 0; ii < Model.TodaysLog.Periods[i].Records.Count; ii++)
+                        {
+                            <li class="mdl-list__item">
+                                <select class="food-select @Model.TodaysLog.Periods[i].Records[ii].Id" asp-items="@(new SelectList(Model.Foods,"Id","Name"))">
+                                    <option selected disabled value="@Model.TodaysLog.Periods[i].Records[ii].FoodId">@Model.TodaysLog.Periods[i].Records[ii].Food.Name</option>
+                                </select>
+                                <input type="text" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].Food.ProteinGrams" />
+                                <input type="text" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].Food.LeucineMilligrams" />
+                                <button class="delete-button @Model.TodaysLog.Periods[i].Records[ii].Id mdl-button mdl-js-button mdl-button--icon" asp-page-handler="">
+                                    <i class="material-icons">delete</i>
+                                </button>
+                            </li>
+                        }
+                        <li class="mdl-list__item">
+                            <button class="add-button" asp-route-periodId="@Model.TodaysLog.Periods[i].Period.Id" asp-route-childId="@Model.TodaysLog.Child.Id" asp-page-handler="AddRecord">Add</button>
+                        </li>
+                    }
+                </ul>
             </div>
         </div>
-        <div class="flex flex-grow-1 justify-content-center">
-            <ul class="mdl-list">
-                @for (int i = 0; i < Model.TodaysLog.Periods.Count; i++)
-                {
-                    <li class="mdl-list__item period">
-                        <span class="mdl-list__item-primary-content">
-                            @Model.TodaysLog.Periods[i].Period.Name
-                        </span>
-                    </li>
-                    @for(int ii = 0; ii < Model.TodaysLog.Periods[i].Records.Count; ii++)
-                    {
-                <li class="mdl-list__item">
-                    @*<div class="ui search selection dropdown">
-                <input type="hidden" id="@Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].FoodId" />
-                <i class="dropdown icon"></i>
-                <div class="default text">Select food</div>
-                <div class="menu">
-                    @foreach (var food in Model.Foods)
-                    {
-                        <div class="item" data-value="@food.Id">@food.Name</div>
-                    }
-                </div>
-            </div>*@
-                    @{
-                        var a = Model.TodaysLog.Periods[i].Records[ii];
-                    }
-                    <select class="food-select @Model.TodaysLog.Periods[i].Records[ii].Id" asp-items="@(new SelectList(Model.Foods,"Id","Name"))">
-                        <option selected disabled value="@Model.TodaysLog.Periods[i].Records[ii].FoodId">@Model.TodaysLog.Periods[i].Records[ii].Food.Name</option>
-                    </select>
-                    <input type="text" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].Food.ProteinGrams" />
-                    <input type="text" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].Food.LeucineMilligrams" />
-                    <button class="delete-button @Model.TodaysLog.Periods[i].Records[ii].Id mdl-button mdl-js-button mdl-button--icon">
-                        <i class="material-icons">delete</i>
-                    </button>
-                </li>
-                    }
-                }
-            </ul>
-        </div>
-    </div>
-</section>
+    </section>
+</form>

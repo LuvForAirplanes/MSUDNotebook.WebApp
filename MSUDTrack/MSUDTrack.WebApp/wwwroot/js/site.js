@@ -3,6 +3,7 @@
 
 $(document).ready(function () {
     $(".food-select").on("input", function (e) {
+        e.preventDefault();
         //here goes the api post
         var targetId = $(this).attr('class').split(' ')[1];
         var elements = $("." + targetId);
@@ -50,9 +51,9 @@ $(document).ready(function () {
         $.ajax({
             type: 'DELETE',
             url: '/api/Records/' + targetId
+        }).done(function () {
+            location.reload();
         });
-
-        location.reload();
     });
 
     $("#child-select").on("input", function (e) {

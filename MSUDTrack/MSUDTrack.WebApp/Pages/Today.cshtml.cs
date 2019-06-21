@@ -29,6 +29,28 @@ namespace MSUDTrack.WebApp.Pages
 
         public async Task OnGetAsync()
         {
+            ModelState.Clear();
+            await LoadData();
+        }
+
+        public async Task<IActionResult> OnPostAddRecordAsync(string periodId, string childId)
+        {
+            await _recordsService.CreateAsync(new Record()
+            {
+                Id = System.Guid.NewGuid().ToString(),
+                ChildId = childId,
+                PeriodId = periodId,
+                Created = DateTime.Now,
+                FoodId = "defaultFood"
+            });
+
+            await LoadData();
+            ModelState.Clear();
+            return Page();
+        }
+
+        public async Task LoadData()
+        {
             TodaysLog = await _recordsService.GetTodaysRecordsByCurrentChildAsync();
             Foods = await _foodsService.ListAsync();
         }
