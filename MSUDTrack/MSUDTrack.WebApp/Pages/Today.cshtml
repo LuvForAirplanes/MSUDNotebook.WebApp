@@ -5,28 +5,14 @@
     ViewData["Title"] = "Today";
 }
 
-@section  Styles {
     <style>
         .period {
-            background-color:grey;
-        }
-
-        .mdl-list__item {
-            min-height: 0 !important;
-            padding-top: 10px;
-            padding-bottom: 10px;
-        }
-
-        .mdl-list {
-            width:350px;
+            background-color:#d7d2d2;
+            padding:10px !important;
         }
 
         .nutri-inputs {
             width:90px;
-        }
-
-        .material-icons {
-            color:red !important;
         }
 
         .add-button {
@@ -35,47 +21,85 @@
             background: none;
             border: none;
         }
-    </style>
-}
 
-<section class="mdl-layout__tab-panel is-active">
-    <div class="page-content flex-column">
+        .list-button {
+            border: 0 !important;
+            background: none !important;
+            box-shadow: none !important;
+        }
+
+        .name-title {
+            margin-bottom: 0;
+        }
+
+        .leucine-title {
+            margin-top: 0;
+            padding-bottom:10px;
+        }
+
+        section {
+            padding:10px;
+        }
+
+        .ui.segment {
+            padding:0;
+        }
+
+        div > .ui.dropdown {
+            border: 0 !important;
+        }
+    </style>
+
+<section>
+    <div class="flex-column">
         <div class="flex flex-grow-1 justify-content-center">
             <div class="align-text-center">
                 @{
                     var leucineMG = Model.TodaysLog.Periods.Sum(p => p.Records.Sum(r => int.Parse(r.Food.LeucineMilligrams)));
                 }
-                <h3 class="name-title">@Model.TodaysLog.Child.Name</h3>
-                <h4 class="leucine-title">Today @(leucineMG)mg @(leucineMG < 300 ? ":)" : ":(")</h4>
+                <h1 class="name-title">@Model.TodaysLog.Child.Name</h1>
+                <h2 class="leucine-title">Today @(leucineMG)mg @(leucineMG < 300 ? ":)" : ":(")</h2>
             </div>
         </div>
         <div class="flex flex-grow-1 justify-content-center">
-            <ul class="mdl-list">
-                @for (int i = 0; i < Model.TodaysLog.Periods.Count; i++)
-                {
-                    <li class="mdl-list__item period">
-                        <span class="mdl-list__item-primary-content">
-                            @Model.TodaysLog.Periods[i].Period.Name
-                        </span>
-                    </li>
-                    @for (int ii = 0; ii < Model.TodaysLog.Periods[i].Records.Count; ii++)
+            <div class="ui segment">
+                <div class="ui fluid list">
+                    @for (int i = 0; i < Model.TodaysLog.Periods.Count; i++)
                     {
-                        <li class="mdl-list__item">
-                            <select class="food-select @Model.TodaysLog.Periods[i].Records[ii].Id" asp-items="@(new SelectList(Model.Foods,"Id","Name"))">
-                                <option selected disabled value="@Model.TodaysLog.Periods[i].Records[ii].FoodId">@Model.TodaysLog.Periods[i].Records[ii].Food.Name</option>
-                            </select>
-                            <input type="text" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].Food.ProteinGrams" />
-                            <input type="text" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].Food.LeucineMilligrams" />
-                            <button class="delete-button @Model.TodaysLog.Periods[i].Records[ii].Id mdl-button mdl-js-button mdl-button--icon" asp-page-handler="">
-                                <i class="material-icons">delete</i>
-                            </button>
-                        </li>
+                        <div class="item period">
+                            @Model.TodaysLog.Periods[i].Period.Name
+                        </div>
+                        @for (int ii = 0; ii < Model.TodaysLog.Periods[i].Records.Count; ii++)
+                        {
+                            <div class="item">
+                                <div class="ui search selection dropdown">
+                                    <input type="hidden" />
+                                    <i class="dropdown icon"></i>
+                                    <div class="default text">Select type</div>
+                                    <div class="menu">
+                                        <div class="item" data-value="">(None)</div>
+                                        @foreach (var type in Model.Foods)
+                                        {
+                                            <div class="item" data-value="@type.Id">@type.Name</div>
+                                        }
+                                    </div>
+                                </div>
+                                <select class="food-select @Model.TodaysLog.Periods[i].Records[ii].Id" asp-items="@(new SelectList(Model.Foods,"Id","Name"))">
+                                    <option selected disabled value="@Model.TodaysLog.Periods[i].Records[ii].FoodId">@Model.TodaysLog.Periods[i].Records[ii].Food.Name</option>
+                                </select>
+                                <input type="text" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].Food.ProteinGrams" />
+                                <input type="text" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].Food.LeucineMilligrams" />
+                                <button class="delete-button @Model.TodaysLog.Periods[i].Records[ii].Id ui button list-button" asp-page-handler="">
+                                    <i class="red trash alternate icon"></i>
+                                </button>
+                            </div>
+                        }
+                        <div class="item">
+                            <button class="add-button @Model.TodaysLog.Periods[i].Period.Id">Add</button>
+                        </div>
                     }
-                    <li class="mdl-list__item">
-                        <button class="add-button @Model.TodaysLog.Periods[i].Period.Id">Add</button>
-                    </li>
-                }
-            </ul>
+                </div>
+            </div>
         </div>
     </div>
 </section>
