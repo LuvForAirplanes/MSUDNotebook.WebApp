@@ -11,7 +11,7 @@ namespace MSUDTrack.DataModels.Models
 
         public ApplicationUser(string userName) : base(userName) { }
         /// <summary>
-        /// The users preference of a theme for Candle.
+        /// The users preference of a theme for MSUD Track.
         /// </summary>
         public string Theme { get; set; }
         /// <summary>
