@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MSUDTrack.DataModels.Models
 {
-    public class Record : BaseModel
+    public class Record : Food
     {
         /// <summary>
         /// The Child which consumed the food.
@@ -12,13 +12,6 @@ namespace MSUDTrack.DataModels.Models
         public Child Child { get; set; }
 
         public string ChildId { get; set; }
-
-        /// <summary>
-        /// The food consumed.
-        /// </summary>
-        public Food Food { get; set; }
-
-        public string FoodId { get; set; }
 
         /// <summary>
         /// The period in which the food was consumed.

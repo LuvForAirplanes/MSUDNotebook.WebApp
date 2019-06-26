@@ -36,8 +36,7 @@ namespace MSUDTrack.WebApp.Pages
                 Id = System.Guid.NewGuid().ToString(),
                 ChildId = childId,
                 PeriodId = periodId,
-                Created = DateTime.Now,
-                FoodId = "defaultFood"
+                Created = DateTime.Now
             });
 
             await LoadData();

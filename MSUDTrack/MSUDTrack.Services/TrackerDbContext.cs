@@ -92,15 +92,16 @@ namespace MSUDTrack.Services
 
                 entity.Property(e => e.Updated).HasColumnName("updated");
 
+                entity.Property(e => e.Name).HasColumnName("name");
+
+                entity.Property(e => e.ProteinGrams).HasColumnName("protein_grams");
+
+                entity.Property(e => e.LeucineMilligrams).HasColumnName("leucine_milligrams");
+
                 entity.HasOne(p => p.Child)
                     .WithMany()
                     .HasForeignKey(d => d.ChildId)
                     .HasConstraintName("records_childid_fkey");
-
-                entity.HasOne(p => p.Food)
-                    .WithMany()
-                    .HasForeignKey(d => d.FoodId)
-                    .HasConstraintName("records_foodid_fkey");
 
                 entity.HasOne(p => p.Period)
                     .WithMany()

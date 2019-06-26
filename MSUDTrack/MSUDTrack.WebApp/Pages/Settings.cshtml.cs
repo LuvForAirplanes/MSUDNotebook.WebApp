@@ -32,12 +32,13 @@ namespace MSUDTrack.WebApp.Pages
         {
             ModelState.Clear();
 
-            NewChild = new Child() { Id = Guid.NewGuid().ToString(), IsActive = true };
+            NewChild = new Child() { Id = Guid.NewGuid().ToString(), IsActive = true, IsSelected = true };
             Children = _childrensService.Get().ToList();
         }
 
         public async Task OnPostAddChildAsync()
         {
+            NewChild.IsSelected = true;
             await _childrensService.CreateAsync(NewChild);
 
             InitData();

@@ -45,7 +45,7 @@ namespace MSUDTrack.WebApp.Controllers
                 {
                     Id = food.Id,
                     Created = existingFood.Created,
-                    LeucineMilligrams = (int.Parse(food.ProteinGrams) * 100).ToString(),
+                    LeucineMilligrams = food.ProteinGrams * 100,
                     Name = existingFood.Name,
                     ProteinGrams = food.ProteinGrams,
                     Updated = DateTime.Now

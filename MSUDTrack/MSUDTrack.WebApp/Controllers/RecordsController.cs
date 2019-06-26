@@ -32,7 +32,6 @@ namespace MSUDTrack.WebApp.Controllers
                     Id = record.Id,
                     ChildId = existing.ChildId,
                     Created = existing.Created,
-                    FoodId = record.FoodId,
                     PeriodId = existing.PeriodId,
                     Updated = DateTime.Now
                 };
@@ -63,8 +62,7 @@ namespace MSUDTrack.WebApp.Controllers
                 Id = System.Guid.NewGuid().ToString(),
                 PeriodId = periodId,
                 ChildId = _childrensService.GetCurrentChild().Id,
-                Created = DateTime.Now,
-                FoodId = "defaultFood"
+                Created = DateTime.Now
             });
         }
     }
