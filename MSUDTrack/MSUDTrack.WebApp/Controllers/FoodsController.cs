@@ -23,6 +23,17 @@ namespace MSUDTrack.WebApp.Controllers
             _foodsService = foodsService;
         }
 
+        [HttpGet]
+        public async Task<ActionResult<List<Food>>> GetFood(string query, int page_limit)
+        {
+            return await _foodsService.Get()
+                .Where(f => f.Name 
+                    .ToLower() 
+                    .Contains(query))
+                .Take(page_limit)
+                .ToListAsync();
+        }
+
         // POST: api/Foods
         [HttpPost]
         public async Task<ActionResult<Food>> PostFood(Food food)

@@ -2,27 +2,27 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 $(document).ready(function () {
-    $(".food-select").on("input", function (e) {
-        e.preventDefault();
-        //here goes the api post
-        var targetId = $(this).attr('class').split(' ')[1];
-        var elements = $("." + targetId);
+    //$(".food-select").on("input", function (e) {
+    //    e.preventDefault();
+    //    //here goes the api post
+    //    var targetId = $(this).attr('class').split(' ')[1];
+    //    var elements = $("." + targetId);
 
-        var record = {
-            Id: targetId,
-            FoodId: elements[0].value
-        };
+    //    var record = {
+    //        Id: targetId,
+    //        FoodId: elements[0].value
+    //    };
 
-        $.ajax({
-            type: 'POST',
-            url: '/api/Records',
-            data: JSON.stringify(record),
-            contentType: 'application/json; charset=utf-8',
-            dataType: 'json'
-        }).done(function () {
-            location.reload();
-        });
-    });
+    //    $.ajax({
+    //        type: 'POST',
+    //        url: '/api/Records',
+    //        data: JSON.stringify(record),
+    //        contentType: 'application/json; charset=utf-8',
+    //        dataType: 'json'
+    //    }).done(function () {
+    //        location.reload();
+    //    });
+    //});
 
     $(".nutri-inputs").on("input", function (e) {
         //here goes the api post
@@ -81,5 +81,25 @@ $(document).ready(function () {
         }).done(function () {
             location.reload();
         });
+    });
+
+    $(".food-select").selectize({
+        plugins: ['remove_button'],
+        valueField: 'id',
+        labelField: 'name',
+        searchField: 'name',
+        create: false,
+        load: function (query, callback) {
+            $.ajax({
+                url: "api/Foods?query=" + query + "&page_limit=10",
+                type: 'GET',
+                error: function () {
+                    callback();
+                },
+                success: function (res) {
+                    callback(res);
+                }
+            });
+        }
     });
 });
