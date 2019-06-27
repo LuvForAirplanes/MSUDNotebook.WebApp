@@ -131,9 +131,6 @@ namespace MSUDTrack.Services.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnName("created");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired();
-
                     b.Property<int?>("LeucineMilligrams")
                         .HasColumnName("leucine_milligrams");
 
@@ -151,8 +148,6 @@ namespace MSUDTrack.Services.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("foods");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Food");
                 });
 
             modelBuilder.Entity("MSUDTrack.DataModels.Models.Period", b =>
@@ -178,6 +173,41 @@ namespace MSUDTrack.Services.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("periods");
+                });
+
+            modelBuilder.Entity("MSUDTrack.DataModels.Models.Record", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnName("id");
+
+                    b.Property<string>("ChildId");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnName("created");
+
+                    b.Property<int?>("LeucineMilligrams")
+                        .HasColumnName("leucine_milligrams");
+
+                    b.Property<string>("Name")
+                        .HasColumnName("name");
+
+                    b.Property<string>("PeriodId");
+
+                    b.Property<int?>("ProteinGrams")
+                        .HasColumnName("protein_grams");
+
+                    b.Property<DateTime>("Updated")
+                        .HasColumnName("updated");
+
+                    b.Property<int?>("WeightGrams");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChildId");
+
+                    b.HasIndex("PeriodId");
+
+                    b.ToTable("records");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -266,19 +296,15 @@ namespace MSUDTrack.Services.Migrations
 
             modelBuilder.Entity("MSUDTrack.DataModels.Models.Record", b =>
                 {
-                    b.HasBaseType("MSUDTrack.DataModels.Models.Food");
+                    b.HasOne("MSUDTrack.DataModels.Models.Child", "Child")
+                        .WithMany()
+                        .HasForeignKey("ChildId")
+                        .HasConstraintName("records_childid_fkey");
 
-                    b.Property<string>("ChildId");
-
-                    b.Property<string>("PeriodId");
-
-                    b.HasIndex("ChildId");
-
-                    b.HasIndex("PeriodId");
-
-                    b.ToTable("records");
-
-                    b.HasDiscriminator().HasValue("Record");
+                    b.HasOne("MSUDTrack.DataModels.Models.Period", "Period")
+                        .WithMany()
+                        .HasForeignKey("PeriodId")
+                        .HasConstraintName("records_periodid_fkey");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -324,19 +350,6 @@ namespace MSUDTrack.Services.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("MSUDTrack.DataModels.Models.Record", b =>
-                {
-                    b.HasOne("MSUDTrack.DataModels.Models.Child", "Child")
-                        .WithMany()
-                        .HasForeignKey("ChildId")
-                        .HasConstraintName("records_childid_fkey");
-
-                    b.HasOne("MSUDTrack.DataModels.Models.Period", "Period")
-                        .WithMany()
-                        .HasForeignKey("PeriodId")
-                        .HasConstraintName("records_periodid_fkey");
                 });
 #pragma warning restore 612, 618
         }

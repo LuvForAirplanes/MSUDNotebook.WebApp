@@ -67,6 +67,23 @@ namespace MSUDTrack.Services.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "foods",
+                columns: table => new
+                {
+                    id = table.Column<string>(nullable: false),
+                    created = table.Column<DateTime>(nullable: false),
+                    updated = table.Column<DateTime>(nullable: false),
+                    name = table.Column<string>(nullable: true),
+                    protein_grams = table.Column<int>(nullable: true),
+                    leucine_milligrams = table.Column<int>(nullable: true),
+                    WeightGrams = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_foods", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "periods",
                 columns: table => new
                 {
@@ -189,23 +206,22 @@ namespace MSUDTrack.Services.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "foods",
+                name: "records",
                 columns: table => new
                 {
                     id = table.Column<string>(nullable: false),
                     created = table.Column<DateTime>(nullable: false),
                     updated = table.Column<DateTime>(nullable: false),
+                    ChildId = table.Column<string>(nullable: true),
+                    PeriodId = table.Column<string>(nullable: true),
                     name = table.Column<string>(nullable: true),
                     protein_grams = table.Column<int>(nullable: true),
                     leucine_milligrams = table.Column<int>(nullable: true),
-                    WeightGrams = table.Column<int>(nullable: true),
-                    Discriminator = table.Column<string>(nullable: false),
-                    ChildId = table.Column<string>(nullable: true),
-                    PeriodId = table.Column<string>(nullable: true)
+                    WeightGrams = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_foods", x => x.id);
+                    table.PrimaryKey("PK_records", x => x.id);
                     table.ForeignKey(
                         name: "records_childid_fkey",
                         column: x => x.ChildId,
@@ -258,13 +274,13 @@ namespace MSUDTrack.Services.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_foods_ChildId",
-                table: "foods",
+                name: "IX_records_ChildId",
+                table: "records",
                 column: "ChildId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_foods_PeriodId",
-                table: "foods",
+                name: "IX_records_PeriodId",
+                table: "records",
                 column: "PeriodId");
         }
 
@@ -287,6 +303,9 @@ namespace MSUDTrack.Services.Migrations
 
             migrationBuilder.DropTable(
                 name: "foods");
+
+            migrationBuilder.DropTable(
+                name: "records");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

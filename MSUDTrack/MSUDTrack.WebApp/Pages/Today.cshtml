@@ -48,12 +48,12 @@
     </style>
 }
 
-@*<section class="mdl-layout__tab-panel is-active">
+<section class="mdl-layout__tab-panel is-active">
     <div class="page-content flex-column">
         <div class="flex flex-grow-1 justify-content-center">
             <div class="align-text-center">
                 @{
-                    var leucineMG = Model.TodaysLog.Periods.Sum(p => p.Records.Sum(r => int.Parse(r.Food.LeucineMilligrams)));
+                    var leucineMG = Model.TodaysLog.Periods.Sum(p => p.Records.Sum(r => r.LeucineMilligrams));
                 }
                 <h3 class="name-title">@Model.TodaysLog.Child.Name</h3>
                 <h4 class="leucine-title">Today @(leucineMG)mg @(leucineMG < 300 ? ":)" : ":(")</h4>
@@ -72,11 +72,11 @@
                     {
                         <li class="mdl-list__item">
                             <select class="food-select @Model.TodaysLog.Periods[i].Records[ii].Id">
-                                <option value="@Model.TodaysLog.Periods[i].Records[ii].FoodId">@Model.TodaysLog.Periods[i].Records[ii].Food.Name</option>
+                                <option>@Model.TodaysLog.Periods[i].Records[ii].Name</option>
                             </select>
 
-                            <input type="text" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].Food.ProteinGrams" />
-                            <input type="text" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].Food.LeucineMilligrams" />
+                            <input type="text" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].ProteinGrams" />
+                            <input type="text" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].LeucineMilligrams" />
                             <button class="delete-button @Model.TodaysLog.Periods[i].Records[ii].Id mdl-button mdl-js-button mdl-button--icon" asp-page-handler="">
                                 <i class="material-icons">delete</i>
                             </button>
@@ -89,4 +89,4 @@
             </ul>
         </div>
     </div>
-</section>*@
+</section>
