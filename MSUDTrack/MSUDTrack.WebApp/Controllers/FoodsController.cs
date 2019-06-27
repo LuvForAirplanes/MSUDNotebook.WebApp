@@ -34,34 +34,35 @@ namespace MSUDTrack.WebApp.Controllers
                 .ToListAsync();
         }
 
-        // POST: api/Foods
-        [HttpPost]
-        public async Task<ActionResult<Food>> PostFood(Food food)
-        {
-            if (await _foodsService.GetByIdAsync(food.Id) != null)
-            {
-                var existingFood = await _foodsService.GetByIdAsync(food.Id);
-                var newFood = new Food()
-                {
-                    Id = food.Id,
-                    Created = existingFood.Created,
-                    LeucineMilligrams = food.ProteinGrams * 100,
-                    Name = existingFood.Name,
-                    ProteinGrams = food.ProteinGrams,
-                    Updated = DateTime.Now
-                };
+        //We should never update food via the API
+        //// POST: api/Foods
+        //[HttpPost]
+        //public async Task<ActionResult<Food>> PostFood(Food food)
+        //{
+        //    if (await _foodsService.GetByIdAsync(food.Id) != null)
+        //    {
+        //        var existingFood = await _foodsService.GetByIdAsync(food.Id);
+        //        var newFood = new Food()
+        //        {
+        //            Id = food.Id,
+        //            Created = existingFood.Created,
+        //            LeucineMilligrams = food.ProteinGrams * 100,
+        //            Name = existingFood.Name,
+        //            ProteinGrams = food.ProteinGrams,
+        //            Updated = DateTime.Now
+        //        };
 
-                return await _foodsService.UpdateAsync(newFood, newFood.Id); 
-            }
-            else
-            {
-                return await _foodsService.CreateAsync(food);
-            }
-        }
+        //        return await _foodsService.UpdateAsync(newFood, newFood.Id); 
+        //    }
+        //    else
+        //    {
+        //        return await _foodsService.CreateAsync(food);
+        //    }
+        //}
 
-        private bool FoodExists(string id)
-        {
-            return _context.Foods.Any(e => e.Id == id);
-        }
+        //private bool FoodExists(string id)
+        //{
+        //    return _context.Foods.Any(e => e.Id == id);
+        //}
     }
 }

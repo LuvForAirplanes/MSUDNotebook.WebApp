@@ -12,39 +12,65 @@ namespace MSUDTrack.WebApp.Controllers
     {
         private readonly RecordsService _recordsService;
         private readonly ChildrensService _childrensService;
+        private readonly FoodsService _foodsService;
 
-        public RecordsController(RecordsService recordsService, ChildrensService childrensService)
+        public RecordsController(RecordsService recordsService, ChildrensService childrensService, FoodsService foodsService)
         {
             _recordsService = recordsService;
             _childrensService = childrensService;
+            _foodsService = foodsService;
         }
 
         // POST: api/Records
         [HttpPost]
-        public async Task<ActionResult<Record>> PostRecord(Record record)
+        public async Task<ActionResult<Record>> PostRecord(UpdatedRecord record)
         {
-            if(await _recordsService.GetByIdAsync(record.Id) != null)
+            var isNew = await _recordsService.GetByIdAsync(record.Id) != null;
+            if (isNew)
             {
                 var existing = await _recordsService.GetByIdAsync(record.Id);
-
-                var newRecord = new Record()
+                var food = await _foodsService.GetByIdAsync(record.FoodId);
+                var newRecord = new Record();
+                if (!string.IsNullOrEmpty(record.FoodId))
                 {
-                    Id = record.Id,
-                    ChildId = existing.ChildId,
-                    Created = existing.Created,
-                    PeriodId = existing.PeriodId,
-                    Updated = DateTime.Now
-                };
+                    newRecord = new Record()
+                    {
+                        Id = record.Id,
+                        ChildId = existing.ChildId,
+                        Created = existing.Created,
+                        LeucineMilligrams = food.LeucineMilligrams,
+                        Name = food.Name,
+                        PeriodId = existing.PeriodId,
+                        ProteinGrams = food.ProteinGrams,
+                        Updated = DateTime.Now
+                    };
 
+                }
+                else
+                {
+                    newRecord = new Record()
+                    {
+                        Id = record.Id,
+                        ChildId = existing.ChildId,
+                        Created = existing.Created,
+                        PeriodId = existing.PeriodId,
+                        Updated = DateTime.Now
+                    };
+
+                }
+                
                 return await _recordsService.UpdateAsync(newRecord, newRecord.Id);
             }
+            else if (isNew)
+                return new Record();
+            //return await _recordsService.CreateAsync(record);
             else
-                return await _recordsService.CreateAsync(record);
+                return StatusCode(500);
         }
 
         // DELETE: api/Foods/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Record>> DeleteFood(string id)
+        public async Task<ActionResult<Record>> DeleteRecord(string id)
         {
             var recordToDelete = await _recordsService.GetByIdAsync(id);
 
@@ -55,7 +81,7 @@ namespace MSUDTrack.WebApp.Controllers
 
         // PUT: api/Foods/5
         [HttpPut("{periodId}")]
-        public async Task<ActionResult<Record>> PutFood(string periodId)
+        public async Task<ActionResult<Record>> PutRecord(string periodId)
         {
             return await _recordsService.CreateAsync(new Record()
             {
@@ -65,5 +91,12 @@ namespace MSUDTrack.WebApp.Controllers
                 Created = DateTime.Now
             });
         }
+    }
+
+    public class UpdatedRecord
+    {
+        public string Id { get; set; }
+
+        public string FoodId { get; set; }
     }
 }

@@ -9,6 +9,10 @@
     <style>
         .period {
             background-color:#dfdede;
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            padding-left: 10px;
+            padding-right: 10px;
         }
 
         .mdl-list__item {
@@ -18,7 +22,7 @@
         }
 
         .food-select {
-            width:100px;
+            width:200px;
         }
 
         .selectize-input {
@@ -44,6 +48,7 @@
             height: 40px;
             background: none;
             border: none;
+            text-align:right;
         }
     </style>
 }
@@ -66,15 +71,18 @@
                     <li class="mdl-list__item period">
                         <span class="mdl-list__item-primary-content">
                             @Model.TodaysLog.Periods[i].Period.Name
+                            <button class="add-button @Model.TodaysLog.Periods[i].Period.Id">+</button>
                         </span>
                     </li>
                     @for (int ii = 0; ii < Model.TodaysLog.Periods[i].Records.Count; ii++)
                     {
                         <li class="mdl-list__item">
-                            <select class="food-select @Model.TodaysLog.Periods[i].Records[ii].Id">
-                                <option>@Model.TodaysLog.Periods[i].Records[ii].Name</option>
+                            <select class="food-select @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].Name">
+                                @if(Model.TodaysLog.Periods[i].Records[ii].Name != null)
+                                {
+                                    <option selected="selected" value="default">@Model.TodaysLog.Periods[i].Records[ii].Name</option>
+                                }
                             </select>
-
                             <input type="text" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].ProteinGrams" />
                             <input type="text" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].LeucineMilligrams" />
                             <button class="delete-button @Model.TodaysLog.Periods[i].Records[ii].Id mdl-button mdl-js-button mdl-button--icon" asp-page-handler="">
@@ -82,9 +90,6 @@
                             </button>
                         </li>
                     }
-                    <li class="mdl-list__item">
-                        <button class="add-button @Model.TodaysLog.Periods[i].Period.Id">Add</button>
-                    </li>
                 }
             </ul>
         </div>
