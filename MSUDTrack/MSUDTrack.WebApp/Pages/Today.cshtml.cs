@@ -23,10 +23,15 @@ namespace MSUDTrack.WebApp.Pages
 
         public TodayDTO TodaysLog { get; set; } = new TodayDTO();
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
             ModelState.Clear();
             await LoadData();
+
+            if (TodaysLog.Child == null)
+                return RedirectToPage("/Settings");
+
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAddRecordAsync(string periodId, string childId)
