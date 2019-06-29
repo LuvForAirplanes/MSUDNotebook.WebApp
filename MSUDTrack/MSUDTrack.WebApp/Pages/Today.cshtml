@@ -59,9 +59,21 @@
             <div class="align-text-center">
                 @{
                     var leucineMG = Model.TodaysLog.Periods.Sum(p => p.Records.Sum(r => r.LeucineMilligrams));
+                    var face = "";
+                    if(leucineMG == 0)
+                    {
+                        face = "";
+                    }
+                    else if (leucineMG <= 300)
+                    {
+                        face = ":)";
+                    } else if (leucineMG > 300)
+                    {
+                        face = ":(";
+                    }
                 }
                 <h3 class="name-title">@Model.TodaysLog.Child.Name</h3>
-                <h4 class="leucine-title">Today @(leucineMG)mg @(leucineMG < 300 ? ":)" : ":(")</h4>
+                <h4 class="leucine-title">Today @(leucineMG)mg @face</h4>
             </div>
         </div>
         <div class="flex flex-grow-1 justify-content-center">

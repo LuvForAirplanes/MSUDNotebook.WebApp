@@ -9,9 +9,9 @@ $(document).ready(function () {
         var elements = $("." + targetId);
 
         var food = {
-            Id: elements[0].value,
-            ProteinGrams: elements[1].value,
-            LeucineMilligrams: elements[2].value
+            Id: targetId,
+            ProteinGrams: elements[3].value,
+            LeucineMilligrams: elements[4].value
         };
 
         if (food.ProteinGrams === "")
@@ -19,12 +19,12 @@ $(document).ready(function () {
 
         $.ajax({
             type: 'POST',
-            url: '/api/Foods',
+            url: '/api/Records',
             data: JSON.stringify(food),
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             success: function (data) {
-                elements[2].value = data.leucineMilligrams;
+                elements[4].value = data.leucineMilligrams;
             }
         });
     });
