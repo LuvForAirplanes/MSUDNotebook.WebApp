@@ -131,17 +131,19 @@ namespace MSUDTrack.Services.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnName("created");
 
-                    b.Property<string>("LeucineMilligrams")
+                    b.Property<int?>("LeucineMilligrams")
                         .HasColumnName("leucine_milligrams");
 
                     b.Property<string>("Name")
                         .HasColumnName("name");
 
-                    b.Property<string>("ProteinGrams")
+                    b.Property<int?>("ProteinGrams")
                         .HasColumnName("protein_grams");
 
                     b.Property<DateTime>("Updated")
                         .HasColumnName("updated");
+
+                    b.Property<int?>("WeightGrams");
 
                     b.HasKey("Id");
 
@@ -183,18 +185,25 @@ namespace MSUDTrack.Services.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnName("created");
 
-                    b.Property<string>("FoodId");
+                    b.Property<int?>("LeucineMilligrams")
+                        .HasColumnName("leucine_milligrams");
+
+                    b.Property<string>("Name")
+                        .HasColumnName("name");
 
                     b.Property<string>("PeriodId");
+
+                    b.Property<int?>("ProteinGrams")
+                        .HasColumnName("protein_grams");
 
                     b.Property<DateTime>("Updated")
                         .HasColumnName("updated");
 
+                    b.Property<int?>("WeightGrams");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ChildId");
-
-                    b.HasIndex("FoodId");
 
                     b.HasIndex("PeriodId");
 
@@ -291,11 +300,6 @@ namespace MSUDTrack.Services.Migrations
                         .WithMany()
                         .HasForeignKey("ChildId")
                         .HasConstraintName("records_childid_fkey");
-
-                    b.HasOne("MSUDTrack.DataModels.Models.Food", "Food")
-                        .WithMany()
-                        .HasForeignKey("FoodId")
-                        .HasConstraintName("records_foodid_fkey");
 
                     b.HasOne("MSUDTrack.DataModels.Models.Period", "Period")
                         .WithMany()

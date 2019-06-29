@@ -14,11 +14,16 @@ namespace MSUDTrack.DataModels.Models
         /// <summary>
         /// The amount of protein this food contains, in grams.
         /// </summary>
-        public string ProteinGrams { get; set; }
+        public int? ProteinGrams { get; set; }
 
         /// <summary>
         /// The amount of leucine this food contains, in milligrams.
         /// </summary>
-        public string LeucineMilligrams { get; set; }
+        public int? LeucineMilligrams { get; set; }
+
+        /// <summary>
+        /// The weight of the food consumed, in grams.
+        /// </summary>
+        public int? WeightGrams { get; set; }
     }
 }
