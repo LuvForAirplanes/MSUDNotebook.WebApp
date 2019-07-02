@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MSUDTrack.Tests", "MSUDTrac
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolidMapper", "..\SolidMapper\SolidMapper\SolidMapper\SolidMapper.csproj", "{9EEDAD4E-C2F9-4027-BC0B-D646FB084D7E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "USDA_To_Tracker", "USDA_To_Tracker\USDA_To_Tracker.csproj", "{5D14EFC6-ECE3-484F-AE4C-AF1BA6CD9FEC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{9EEDAD4E-C2F9-4027-BC0B-D646FB084D7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9EEDAD4E-C2F9-4027-BC0B-D646FB084D7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9EEDAD4E-C2F9-4027-BC0B-D646FB084D7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D14EFC6-ECE3-484F-AE4C-AF1BA6CD9FEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D14EFC6-ECE3-484F-AE4C-AF1BA6CD9FEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D14EFC6-ECE3-484F-AE4C-AF1BA6CD9FEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D14EFC6-ECE3-484F-AE4C-AF1BA6CD9FEC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
