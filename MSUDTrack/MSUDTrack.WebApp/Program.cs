@@ -58,7 +58,9 @@ namespace MSUDTrack.WebApp
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseUrls("http://*:1000", "https://*:1234", "https://*:5000", "https://*", "http://*")
+                //standard MSUD Track port is 32981
+                //standard Chrome remote debugging port is 32980
+                .UseUrls("https://*", "https://*:5000", "https://*:32981")
                 .UseStartup<Startup>();
     }
 }

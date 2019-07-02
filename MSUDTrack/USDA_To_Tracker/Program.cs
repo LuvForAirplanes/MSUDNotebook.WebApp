@@ -7,6 +7,8 @@ using System.IO;
 using USDA_To_Tracker.Models;
 using MSUDTrack.DataModels.Models;
 using Humanizer;
+using Microsoft.VisualBasic;
+using ChoETL;
 
 namespace USDA_To_Tracker
 {
@@ -53,20 +55,18 @@ namespace USDA_To_Tracker
                 }
             }
 
-            line = string.Empty;
-            using (var file = new StreamReader(Path.Combine(AppContext.BaseDirectory, @"C:\Users\Micah.abc\OneDrive - Pronect Software\Documents\NutriInfo\v1\Raw\CSV\Products.csv")))
+            using (var reader = new ChoCSVReader(@"C:\Users\Micah.abc\OneDrive - Pronect Software\Documents\NutriInfo\v1\Raw\CSV\Products.csv"))
             {
-                while ((line = file.ReadLine()) != null)
+                foreach (dynamic chooitem in reader)
                 {
-                    var p = line.Split(',');
                     var usda_food = new USDA_Food()
                     {
                         Id = Guid.NewGuid().ToString(),
-                        NDB_Number = p[0].Trim().Trim('"'),
-                        Name = p[1].Trim().Trim('"'),
-                        UPC = p[3].Trim().Trim('"')
+                        NDB_Number = chooitem.ValuesArray[0].Replace('"', ' ').Trim().Trim('"'),
+                        Name = chooitem.ValuesArray[1].Trim().Replace('"', ' ').Trim('"'),
+                        UPC = chooitem.ValuesArray[3].Trim().Replace('"', ' ').Trim('"')
                     };
-
+                     
                     var leucineMg = usda_nutrients.FirstOrDefault(n => n.NDB_Number == usda_food.NDB_Number && n.Name == "Leucine");
                     var proteinMg = usda_nutrients.FirstOrDefault(n => n.NDB_Number == usda_food.NDB_Number && n.Name == "Protein");
                     var weightGm = usda_servingSizes.FirstOrDefault(n => n.NDB_Number == usda_food.NDB_Number);
@@ -77,7 +77,7 @@ namespace USDA_To_Tracker
                         {
                             Id = usda_food.Id,
                             Created = DateTime.Now,
-                            Name = usda_food.Name.Transform(To.TitleCase),
+                            Name = usda_food.Name.Replace(",", " ").ToLower().Transform(To.TitleCase),
                             WeightGrams = double.Parse(weightGm.ServingSize)
                         };
 
