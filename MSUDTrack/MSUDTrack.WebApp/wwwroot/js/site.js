@@ -66,7 +66,6 @@ $(document).ready(function () {
     });
 
     $(".food-select").selectize({
-        plugins: ['remove_button'],
         valueField: 'id',
         labelField: 'name',
         searchField: 'name',

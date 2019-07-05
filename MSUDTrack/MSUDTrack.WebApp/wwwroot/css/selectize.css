@@ -154,7 +154,6 @@
 }
 
 .selectize-input {
-    border: 1px solid #d0d0d0;
     padding: 8px 8px;
     display: inline-block;
     width: 100%;
@@ -164,11 +163,6 @@
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.1);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.1);
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
 }
 
 .selectize-control.multi .selectize-input.has-items {
@@ -185,8 +179,6 @@
 }
 
 .selectize-input.focus {
-    -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15);
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15);
 }
 
 .selectize-input.dropdown-active {
@@ -349,20 +341,6 @@
     .selectize-control.single .selectize-input.input-active,
     .selectize-control.single .selectize-input.input-active input {
         cursor: text;
-    }
-
-    .selectize-control.single .selectize-input:after {
-        content: ' ';
-        display: block;
-        position: absolute;
-        top: 50%;
-        right: 15px;
-        margin-top: -3px;
-        width: 0;
-        height: 0;
-        border-style: solid;
-        border-width: 5px 5px 0 5px;
-        border-color: #808080 transparent transparent transparent;
     }
 
     .selectize-control.single .selectize-input.dropdown-active:after {
