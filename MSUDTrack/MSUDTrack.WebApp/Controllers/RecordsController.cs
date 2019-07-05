@@ -28,9 +28,10 @@ namespace MSUDTrack.WebApp.Controllers
             if (string.IsNullOrEmpty(record.Id))
                 return NotFound();
 
+            //here the food to record mapping is done, the actual count conversions are done in the service
             var existing = await _recordsService.GetByIdAsync(record.Id);
             var food = await _foodsService.GetByIdAsync(record.FoodId);
-            var newRecord = new Record();
+            Record newRecord;
             if (!string.IsNullOrEmpty(record.FoodId))
             {
                 newRecord = new Record()
@@ -42,7 +43,8 @@ namespace MSUDTrack.WebApp.Controllers
                     Name = food.Name,
                     PeriodId = existing.PeriodId,
                     ProteinGrams = food.ProteinGrams,
-                    Updated = DateTime.Now
+                    Updated = DateTime.Now,
+                    WeightGrams = food.WeightGrams
                 };
 
             }
@@ -53,16 +55,17 @@ namespace MSUDTrack.WebApp.Controllers
                     Id = record.Id,
                     ChildId = existing.ChildId,
                     Created = existing.Created,
-                    LeucineMilligrams = record.ProteinGrams * 100,
+                    LeucineMilligrams = record.LeucineMilligrams,
                     Name = existing.Name,
                     PeriodId = existing.PeriodId,
                     ProteinGrams = record.ProteinGrams,
-                    Updated = DateTime.Now
+                    Updated = DateTime.Now,
+                    WeightGrams = record.WeightGrams
                 };
 
             }
 
-            return await _recordsService.UpdateAsync(newRecord, newRecord.Id);
+            return await _recordsService.UpdateAsync(newRecord);
         }
 
         // DELETE: api/Foods/5
@@ -82,7 +85,7 @@ namespace MSUDTrack.WebApp.Controllers
         {
             return await _recordsService.CreateAsync(new Record()
             {
-                Id = System.Guid.NewGuid().ToString(),
+                Id = Guid.NewGuid().ToString(),
                 PeriodId = periodId,
                 ChildId = _childrensService.GetCurrentChild().Id,
                 Created = DateTime.Now
@@ -96,8 +99,10 @@ namespace MSUDTrack.WebApp.Controllers
 
         public string FoodId { get; set; }
 
-        public int? ProteinGrams { get; set; }
+        public double? ProteinGrams { get; set; }
 
-        public int? LeucineMilligrams { get; set; }
+        public double? LeucineMilligrams { get; set; }
+
+        public double? WeightGrams { get; set; }
     }
 }

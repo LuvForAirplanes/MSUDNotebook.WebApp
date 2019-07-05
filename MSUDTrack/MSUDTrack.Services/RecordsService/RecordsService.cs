@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MSUDTrack.DataModels.Models;
 using MSUDTrack.Services.DTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -51,6 +52,88 @@ namespace MSUDTrack.Services
             }
 
             return records;
+        }
+
+        public override async Task<Record> CreateAsync(Record record, bool saveNow = true)
+        {
+            return await base.CreateAsync(await ParseRecordAsync(record), saveNow);
+        }
+
+        public async Task<Record> UpdateAsync(Record record, bool saveNow = true)
+        {
+            return await base.UpdateAsync(await ParseRecordAsync(record), record.Id, saveNow);
+        }
+
+        public async Task<Record> ParseRecordAsync(Record record)
+        {
+            if (!string.IsNullOrEmpty(record.Name))
+            {
+                var existing = await Get().FirstOrDefaultAsync(r => r.Id == record.Id);
+
+                if ((record.LeucineMilligrams == null || record.ProteinGrams != existing.ProteinGrams) && record.WeightGrams != null)
+                {
+                    var child = _childrensService.GetCurrentChild();
+
+                    var multiple = record.WeightGrams / existing.WeightGrams;
+                    var newProtein = multiple * record.ProteinGrams;
+                    var newLeucine = newProtein * child.LeucineMultiple;
+
+                    if(multiple == null)
+                    {
+                        record.LeucineMilligrams = record.ProteinGrams * child.LeucineMultiple;
+                    } else
+                    {
+                        record.ProteinGrams = Math.Round(newProtein.Value, 2);
+                        record.LeucineMilligrams = Math.Round(newLeucine.Value, 0);
+                    }
+                }
+                else if ((record.ProteinGrams == null || record.LeucineMilligrams != existing.LeucineMilligrams) && record.WeightGrams != null)
+                {
+                    var child = _childrensService.GetCurrentChild();
+
+                    var multiple = record.WeightGrams / existing.WeightGrams;
+                    var newLeucine = multiple * record.LeucineMilligrams;
+                    var newProtein = newLeucine / child.LeucineMultiple;
+
+                    if (multiple == null)
+                    {
+                        record.ProteinGrams = record.LeucineMilligrams / child.LeucineMultiple;
+                    }
+                    else
+                    {
+                        record.ProteinGrams = Math.Round(newProtein.Value, 2);
+                        record.LeucineMilligrams = Math.Round(newLeucine.Value, 0);
+                    }
+                }
+                else if(record.WeightGrams != existing.WeightGrams)
+                {
+                    var child = _childrensService.GetCurrentChild();
+
+                    var multiple = record.WeightGrams / existing.WeightGrams;
+                    var newLeucine = multiple * record.LeucineMilligrams;
+                    var newProtein = newLeucine / child.LeucineMultiple;
+
+                    if (multiple == null)
+                    {
+                        record.ProteinGrams = record.LeucineMilligrams / child.LeucineMultiple;
+                    }
+                    else
+                    {
+                        record.ProteinGrams = Math.Round(newProtein.Value, 2);
+                        record.LeucineMilligrams = Math.Round(newLeucine.Value, 0);
+                    }
+                }
+                else if (record.ProteinGrams == null && record.LeucineMilligrams == null)
+                {
+                    throw new Exception("Protein grams or leucine milligrams must be set to save.");
+                }
+                else if (record.WeightGrams == null)
+                {
+                    throw new Exception("No weight is set.");
+                }
+            }
+
+            return record;
         }
     }
 }

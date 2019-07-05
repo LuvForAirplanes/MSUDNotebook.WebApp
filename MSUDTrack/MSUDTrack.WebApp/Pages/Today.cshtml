@@ -8,7 +8,7 @@
 @section  Styles {
     <style>
         .period {
-            background-color:#dfdede;
+            background-color:#cd448e47;
             padding-top: 0 !important;
             padding-bottom: 0 !important;
             padding-left: 10px;
@@ -17,12 +17,15 @@
 
         .mdl-list__item {
             min-height: 0 !important;
-            padding-top: 10px;
-            padding-bottom: 10px;
+            padding-top: 0;
+            padding-bottom: 0;
+            padding-left:2px;
+            padding-right:2px;
+            overflow:unset !important;
         }
 
         .food-select {
-            width:200px;
+            width:300px;
         }
 
         .selectize-input {
@@ -33,10 +36,14 @@
 
         .mdl-list {
             width:350px;
+            border-radius: .28571429rem;
+            border: 1px solid rgba(34,36,38,.15);
+            padding:0 !important;
         }
 
         .nutri-inputs {
             width:40px;
+            border:none;
         }
 
         .material-icons {
@@ -49,6 +56,16 @@
             background: none;
             border: none;
             text-align:right;
+        }
+
+        .dropdown-active {
+            border:0 !important;
+            box-shadow:0 !important;
+            border-color:none !important;
+        }
+
+        .selectize-input.focus {
+            box-shadow:0 !important;
         }
     </style>
 }
@@ -88,19 +105,20 @@
                     </li>
                     @for (int ii = 0; ii < Model.TodaysLog.Periods[i].Records.Count; ii++)
                     {
-                        <li class="mdl-list__item">
-                            <select class="food-select @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].Name">
-                                @if(Model.TodaysLog.Periods[i].Records[ii].Name != null)
-                                {
-                                    <option selected="selected" value="default">@Model.TodaysLog.Periods[i].Records[ii].Name</option>
-                                }
-                            </select>
-                            <input type="text" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].ProteinGrams" />
-                            <input type="text" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].LeucineMilligrams" />
-                            <button class="delete-button @Model.TodaysLog.Periods[i].Records[ii].Id mdl-button mdl-js-button mdl-button--icon" asp-page-handler="">
-                                <i class="material-icons">delete</i>
-                            </button>
-                        </li>
+            <li class="mdl-list__item">
+                <select class="food-select @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].Name">
+                    @if (Model.TodaysLog.Periods[i].Records[ii].Name != null)
+                    {
+                        <option selected="selected" value="default">@Model.TodaysLog.Periods[i].Records[ii].Name</option>
+                    }
+                </select>
+                <input type="text" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].ProteinGrams" />
+                <input type="text" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].LeucineMilligrams" />
+                <input type="text" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].WeightGrams" />
+                <button class="delete-button @Model.TodaysLog.Periods[i].Records[ii].Id mdl-button mdl-js-button mdl-button--icon" asp-page-handler="">
+                    <i class="material-icons">delete</i>
+                </button>
+            </li>
                     }
                 }
             </ul>

@@ -11,10 +11,11 @@ $(document).ready(function () {
         var food = {
             Id: targetId,
             ProteinGrams: elements[3].value,
-            LeucineMilligrams: elements[4].value
+            LeucineMilligrams: elements[4].value,
+            WeightGrams: elements[5].value
         };
 
-        if (food.ProteinGrams === "")
+        if (food.ProteinGrams === "" && food.LeucineMilligrams === "" || food.WeightGrams === "")
             return;
 
         $.ajax({
@@ -24,7 +25,9 @@ $(document).ready(function () {
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             success: function (data) {
+                elements[3].value = data.proteinGrams;
                 elements[4].value = data.leucineMilligrams;
+                elements[5].value = data.weightGrams;
             }
         });
     });

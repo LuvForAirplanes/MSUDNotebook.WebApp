@@ -17,6 +17,11 @@ namespace MSUDTrack.DataModels.Models
         public DateTime Birthday { get; set; }
 
         /// <summary>
+        /// The number by which to multiply the protein grams to find the leucine milligrams
+        /// </summary>
+        public double LeucineMultiple { get; set; } = 100;
+
+        /// <summary>
         /// Whether or not this child is active.
         /// </summary>
         public bool IsActive { get; set; }
