@@ -57,9 +57,9 @@
             <header class="mdl-layout__header">
                 <div class="mdl-layout__header-row">
                     <span class="mdl-layout-title">MSUD Track</span>
-                    <div class="mdl-select">
-                        @if (data.Count > 0)
-                        {
+                    @if (data.Count > 1)
+                    {
+                        <div class="mdl-select">
                             <select class="mdl-select-text" id="child-select">
                                 <option class="hidden" selected disabled value="@(data.FirstOrDefault(c => c.IsSelected).Id)">@(data.FirstOrDefault(c => c.IsSelected).Name)</option>
                                 @for (int i = 0; i < data.Count; i++)
@@ -67,11 +67,11 @@
                                     <option value="@i">@data[i].Name</option>
                                 }
                             </select>
-                        }
-                        <span class="mdl-select-highlight"></span>
-                        <span class="mdl-select-bar"></span>
+                        </div>
+                    }
+                    <span class="mdl-select-highlight"></span>
+                    <span class="mdl-select-bar"></span>
                     </div>
-                </div>
                 <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
                     @{
                         var rv = ViewContext.RouteData.Values.FirstOrDefault().Value.ToString();

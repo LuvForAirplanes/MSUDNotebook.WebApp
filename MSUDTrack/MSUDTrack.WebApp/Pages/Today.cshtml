@@ -9,10 +9,8 @@
     <style>
         .period {
             background-color:#cd448e47;
-            padding-top: 0 !important;
-            padding-bottom: 0 !important;
-            padding-left: 10px;
-            padding-right: 10px;
+            padding-left: 10px !important;
+            padding-right: 10px !important;
         }
 
         .mdl-list__item {
@@ -50,7 +48,12 @@
             background: none;
             border: none;
             text-align:right;
+            font-weight:bold;
         }
+
+         input:focus {
+             outline:none;
+         }
     </style>
 }
 
@@ -65,10 +68,10 @@
                     {
                         face = "";
                     }
-                    else if (leucineMG <= 300)
+                    else if (leucineMG <= 500)
                     {
                         face = ":)";
-                    } else if (leucineMG > 300)
+                    } else if (leucineMG > 500)
                     {
                         face = ":(";
                     }
@@ -89,20 +92,24 @@
                     </li>
                     @for (int ii = 0; ii < Model.TodaysLog.Periods[i].Records.Count; ii++)
                     {
-            <li class="mdl-list__item">
-                <select class="food-select @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].Name">
-                    @if (Model.TodaysLog.Periods[i].Records[ii].Name != null)
-                    {
-                        <option selected="selected" value="default">@Model.TodaysLog.Periods[i].Records[ii].Name</option>
-                    }
-                </select>
-                <input type="text" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].ProteinGrams" />
-                <input type="text" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].LeucineMilligrams" />
-                <input type="text" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].WeightGrams" />
-                <button class="delete-button @Model.TodaysLog.Periods[i].Records[ii].Id mdl-button mdl-js-button mdl-button--icon" asp-page-handler="">
-                    <i class="material-icons">delete</i>
-                </button>
-            </li>
+                        <li class="mdl-list__item">
+                            <select class="food-select @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].Name">
+                                @if (Model.TodaysLog.Periods[i].Records[ii].Name == null)
+                                {
+                                    <option value="" disabled selected>Select a food...</option>
+                                }
+                                @if (Model.TodaysLog.Periods[i].Records[ii].Name != null)
+                                {
+                                    <option selected="selected" value="default">@Model.TodaysLog.Periods[i].Records[ii].Name</option>
+                                }
+                            </select>
+                            <input type="text" placeholder="P. g" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].ProteinGrams" />
+                            <input type="text" placeholder="L. mg" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].LeucineMilligrams" />
+                            <input type="text" placeholder="W. g" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].WeightGrams" />
+                            <button class="delete-button @Model.TodaysLog.Periods[i].Records[ii].Id mdl-button mdl-js-button mdl-button--icon" asp-page-handler="">
+                                <i class="material-icons">delete</i>
+                            </button>
+                        </li>
                     }
                 }
             </ul>
