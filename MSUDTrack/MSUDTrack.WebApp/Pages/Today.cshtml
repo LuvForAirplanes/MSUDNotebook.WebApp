@@ -8,29 +8,20 @@
 @section  Styles {
     <style>
         .period {
-            background-color:#cd448e47;
-            padding-left: 10px !important;
-            padding-right: 10px !important;
+            background-color:#e91e6361;
         }
 
-        .mdl-list__item {
-            min-height: 0 !important;
-            padding-top: 0;
-            padding-bottom: 0;
-            padding-left:2px;
-            padding-right:2px;
-            overflow:unset !important;
+        .period > td {
+            border:0;
+            padding:16px !important;
         }
 
         .food-select {
             width:300px;
         }
 
-        .mdl-list {
-            width:350px;
-            border-radius: .28571429rem;
-            border: 1px solid rgba(34,36,38,.15);
-            padding:0 !important;
+        td {
+            padding: 0 !important;
         }
 
         .nutri-inputs {
@@ -40,20 +31,29 @@
 
         .material-icons {
             color:red !important;
+            font-size:20px !important;
         }
 
-        .add-button {
-            width: 100%;
-            height: 40px;
-            background: none;
-            border: none;
-            text-align:right;
-            font-weight:bold;
+        input:focus {
+            outline:none;
         }
 
-         input:focus {
-             outline:none;
-         }
+        tr {
+            width:350px !important;
+            padding:0 !important;
+        }
+
+        .period:hover{
+            background-color:#e91e6361 !important;
+        }
+
+        tr:hover {
+            background-color:inherit !important;
+        }
+
+        .mdl-data-table {
+            width:350px;
+        }
     </style>
 }
 
@@ -81,38 +81,52 @@
             </div>
         </div>
         <div class="flex flex-grow-1 justify-content-center">
-            <ul class="mdl-list">
+            <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                <thead>
+
+                </thead>
                 @for (int i = 0; i < Model.TodaysLog.Periods.Count; i++)
                 {
-                    <li class="mdl-list__item period">
-                        <span class="mdl-list__item-primary-content">
-                            @Model.TodaysLog.Periods[i].Period.Name
-                            <button class="add-button @Model.TodaysLog.Periods[i].Period.Id">+</button>
-                        </span>
-                    </li>
+                    <tr class="add-button @Model.TodaysLog.Periods[i].Period.Id period">
+                        <td class="mdl-data-table__cell--non-numeric" colspan="5">
+                            <span class="mdl-list__item-primary-content">
+                                @Model.TodaysLog.Periods[i].Period.Name
+                            </span>
+                        </td>
+                    </tr>
                     @for (int ii = 0; ii < Model.TodaysLog.Periods[i].Records.Count; ii++)
                     {
-                        <li class="mdl-list__item">
-                            <select class="food-select @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].Name">
-                                @if (Model.TodaysLog.Periods[i].Records[ii].Name == null)
-                                {
-                                    <option value="" disabled selected>Select a food...</option>
-                                }
-                                @if (Model.TodaysLog.Periods[i].Records[ii].Name != null)
-                                {
-                                    <option selected="selected" value="default">@Model.TodaysLog.Periods[i].Records[ii].Name</option>
-                                }
-                            </select>
-                            <input type="text" placeholder="P. g" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].ProteinGrams" />
-                            <input type="text" placeholder="L. mg" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].LeucineMilligrams" />
-                            <input type="text" placeholder="W. g" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].WeightGrams" />
-                            <button class="delete-button @Model.TodaysLog.Periods[i].Records[ii].Id mdl-button mdl-js-button mdl-button--icon" asp-page-handler="">
-                                <i class="material-icons">delete</i>
-                            </button>
-                        </li>
+                        <tr>
+                            <td class="mdl-data-table__cell--non-numeric">
+                                <select class="food-select @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].Name">
+                                    @if (Model.TodaysLog.Periods[i].Records[ii].Name == null)
+                                    {
+                                        <option value="" disabled selected>Select a food...</option>
+                                    }
+                                    @if (Model.TodaysLog.Periods[i].Records[ii].Name != null)
+                                    {
+                                        <option selected="selected" value="default">@Model.TodaysLog.Periods[i].Records[ii].Name</option>
+                                    }
+                                </select>
+                            </td>
+                            <td>
+                                <input type="text" placeholder="P. g" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].ProteinGrams" />
+                            </td>
+                            <td>
+                                <input type="text" placeholder="L. mg" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].LeucineMilligrams" />
+                            </td>
+                            <td>
+                                <input type="text" placeholder="W. g" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].WeightGrams" />
+                            </td>
+                            <td>
+                                <button class="delete-button @Model.TodaysLog.Periods[i].Records[ii].Id mdl-button mdl-js-button mdl-button--icon" asp-page-handler="">
+                                    <i class="material-icons">delete</i>
+                                </button>
+                            </td>
+                        </tr>
                     }
                 }
-            </ul>
+            </table>
         </div>
     </div>
 </section>
