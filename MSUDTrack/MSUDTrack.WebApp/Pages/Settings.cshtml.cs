@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MSUDTrack.DataModels.Models;
@@ -9,6 +10,7 @@ using MSUDTrack.Services;
 
 namespace MSUDTrack.WebApp.Pages
 {
+    [Authorize]
     public class SettingsModel : PageModel
     {
         private readonly ChildrensService _childrensService;

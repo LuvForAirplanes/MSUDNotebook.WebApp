@@ -77,9 +77,9 @@
                         var rv = ViewContext.RouteData.Values.FirstOrDefault().Value.ToString();
                     }
 
-                    <a href="Today" class="mdl-layout__tab @(rv == "/Today" ? "is-active" : "")">Today</a>
-                    <a href="History" class="mdl-layout__tab @(rv == "/History" ? "is-active" : "")">History</a>
-                    <a href="Settings" class="mdl-layout__tab @(rv == "/Settings" ? "is-active" : "")">Settings</a>
+                    <a asp-page="Today" class="mdl-layout__tab @(rv == "/Today" ? "is-active" : "")">Today</a>
+                    <a asp-page="History" class="mdl-layout__tab @(rv == "/History" ? "is-active" : "")">History</a>
+                    <a asp-page="Settings" class="mdl-layout__tab @(rv == "/Settings" ? "is-active" : "")">Settings</a>
                 </div>
             </header>
             <main class="mdl-layout__content">

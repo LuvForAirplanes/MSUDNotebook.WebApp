@@ -58,15 +58,15 @@ namespace MSUDTrack.WebApp
             {
                 // Password settings
                 options.Password.RequireDigit = false;
-                options.Password.RequiredLength = 4;
+                options.Password.RequiredLength = 6;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireLowercase = false;
                 options.Password.RequiredUniqueChars = 0;
 
                 // Lockout settings
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
-                options.Lockout.MaxFailedAccessAttempts = 6;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(4320);
+                options.Lockout.MaxFailedAccessAttempts = 10;
                 options.Lockout.AllowedForNewUsers = true;
             });
 

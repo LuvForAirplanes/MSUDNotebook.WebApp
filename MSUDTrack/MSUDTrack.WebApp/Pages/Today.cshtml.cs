@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MSUDTrack.DataModels.Models;
@@ -10,6 +11,7 @@ using MSUDTrack.Services.DTOs;
 
 namespace MSUDTrack.WebApp.Pages
 {
+    [Authorize]
     public class TodayModel : PageModel
     {
         private readonly RecordsService _recordsService;

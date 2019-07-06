@@ -4,36 +4,64 @@
     ViewData["Title"] = "Register User";
 }
 
-<div class="ui grid">
-    <div class="four wide column">
-        <h2>Create Account</h2>
-        <form asp-route-returnUrl="@Model.ReturnUrl" method="post" class="ui form">
-            <div class="ui section divider"></div>
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="field">
-                <label asp-for="Input.Username"></label>
-                <input asp-for="Input.Username" />
-                <span asp-validation-for="Input.Username" class="text-danger"></span>
+<style>
+
+    .demo-card-wide > .mdl-card__title {
+        color: #fff;
+        height: 176px;
+        background: url('https://res.cloudinary.com/luvforairplanes/image/upload/v1562365194/sample.jpg') center / cover;
+    }
+
+    .demo-card-wide > .mdl-card__menu {
+        color: #fff;
+    }
+
+    .mdl-card__supporting-text {
+        padding:28px;
+    }
+
+    .mdl-textfield {
+        width:260px;
+    }
+
+    .mdl-button {
+        width:260px;
+    }
+</style>
+<form asp-route-returnUrl="@Model.ReturnUrl" method="post" class="ui form">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <section class="mdl-layout__tab-panel is-active">
+        <div class="page-content flex-column">
+            <div class="flex flex-grow-1 justify-content-center">
+                <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+                    <div class="mdl-card__title">
+                        <h2 class="mdl-card__title-text">Welcome</h2>
+                    </div>
+                    <div class="mdl-card__supporting-text">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input class="mdl-textfield__input" type="text" id="sample3" asp-for="Input.Username">
+                            <label class="mdl-textfield__label" for="sample3">Username</label>
+                            <span asp-validation-for="Input.Username" class="text-danger"></span>
+                        </div>
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input class="mdl-textfield__input" type="password" id="sample3" asp-for="Input.Password">
+                            <label class="mdl-textfield__label" for="sample3">Password</label>
+                            <span asp-validation-for="Input.Password" class="text-danger"></span>
+                        </div>
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input class="mdl-textfield__input" type="password" id="sample3" asp-for="Input.ConfirmPassword">
+                            <label class="mdl-textfield__label" for="sample3">Confirm Password</label>
+                            <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                        </div>
+                        <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                            Save
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div class="field">
-                <label asp-for="Input.Password"></label>
-                <input asp-for="Input.Password" />
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
-            </div>
-            <div class="field">
-                <label asp-for="Input.ConfirmPassword"></label>
-                <input asp-for="Input.ConfirmPassword" />
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-            </div>
-            <div class="field">
-                <label asp-for="Input.Email"></label>
-                <input asp-for="Input.Email" />
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
-            </div>
-            <button type="submit" class="ui button ">Register</button>
-        </form>
-    </div>
-</div>
+        </div>
+    </section>
+</form>
 
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
