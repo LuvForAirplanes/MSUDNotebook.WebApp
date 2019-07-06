@@ -3,6 +3,20 @@
 @{
     ViewData["Title"] = "Settings";
 }
+
+@section  Styles {
+    <style>
+        .inputs:nth-child(1) {
+            width: 100px;
+            padding-right:20px;
+        }
+
+        .inputs:nth-child(2) {
+            width: 120px;
+        }
+    </style>
+}
+
 <form method="post">
     <section class="mdl-layout__tab-panel is-active">
         <div class="page-content flex-column">
@@ -39,6 +53,22 @@
                         <input type="button" class="mdl-button mdl-js-button mdl-button--primary add-button" onclick="showDiag()" asp-page-handler="" value="Add Person" />
                     </li>
                 </ul>
+            </div>
+            <div class="flex flex-grow-1 justify-content-center">
+                <div class="flex-row">
+                    <div class="flex-grow-1 inputs">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input class="mdl-textfield__input" type="text" id="leucine_exchange" value="@Model.Children.FirstOrDefault(c => c.IsSelected).LeucineMultiple" />
+                            <label class="mdl-textfield__label" for="leucine_exchange">Leucine Exchange</label>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 inputs">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input class="mdl-textfield__input" type="text" id="leucine_exchange" value="@Model.Children.FirstOrDefault(c => c.IsSelected).LeucineMultiple" />
+                            <label class="mdl-textfield__label" for="leucine_exchange">Daily Leucine Count</label>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="flex flex-grow-1 justify-content-center">
                 <p class="settings-paragraphs">
