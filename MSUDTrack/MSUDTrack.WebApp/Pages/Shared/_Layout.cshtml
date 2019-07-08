@@ -1,4 +1,5 @@
 ﻿@inject MSUDTrack.Services.TrackerDbContext dbContext
+@inject  Microsoft.AspNetCore.Identity.UserManager<MSUDTrack.DataModels.Models.ApplicationUser> userManager
 
 <!DOCTYPE html>
 <html>
@@ -52,6 +53,22 @@
     <body>
         @{
             var data = dbContext.Children.Where(c => c.IsActive).ToList();
+            var user = await userManager.GetUserAsync(User);
+
+            var prefix = "";
+
+            if(user.CurrentView.Date == DateTime.Now.Date)
+            {
+                prefix = "Today";
+            }
+            else if(user.CurrentView.Date == DateTime.Now.Date.AddDays(-1))
+            {
+                prefix = "Yesterday";
+            }
+            else
+            {
+                prefix = user.CurrentView.Date.DayOfWeek.ToString();
+            }
         }
         <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-tabs">
             <header class="mdl-layout__header">
@@ -77,7 +94,7 @@
                         var rv = ViewContext.RouteData.Values.FirstOrDefault().Value.ToString();
                     }
 
-                    <a asp-page="Today" class="mdl-layout__tab @(rv == "/Today" ? "is-active" : "")">Today (@(System.DateTime.Now.ToShortDateString()))</a>
+                    <a asp-page="Today" class="mdl-layout__tab @(rv == "/Today" ? "is-active" : "")">@prefix (@(user.CurrentView.ToShortDateString()))</a>
                     <a asp-page="History" class="mdl-layout__tab @(rv == "/History" ? "is-active" : "")">History</a>
                     <a asp-page="Settings" class="mdl-layout__tab @(rv == "/Settings" ? "is-active" : "")">Settings</a>
                 </div>

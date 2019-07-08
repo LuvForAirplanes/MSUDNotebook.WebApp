@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using MSUDTrack.DataModels.Models;
 using MSUDTrack.Services.DTOs;
 using System;
@@ -20,7 +22,7 @@ namespace MSUDTrack.Services
         }
 
         //not currently in use
-        public async Task<TodayDTO> GetTodaysRecordsByCurrentChildAsync()
+        public async Task<TodayDTO> GetTodaysRecordsByCurrentChildAsync(ApplicationUser user)
         {
             var periods = await _periodsService.ListAsync();
             var log = new TodayDTO();
@@ -30,7 +32,7 @@ namespace MSUDTrack.Services
                 log.Periods.Add(new PeriodDTO()
                 {
                     Period = period,
-                    Records = await GetRecordsByPeriodAsync(period.Id)
+                    Records = await GetRecordsByPeriodAsync(period.Id, user)
                 });
             }
 
@@ -39,7 +41,7 @@ namespace MSUDTrack.Services
             return log;
         }
 
-        public async Task<List<Record>> GetRecordsByPeriodAsync(string periodId)
+        public async Task<List<Record>> GetRecordsByPeriodAsync(string periodId, ApplicationUser user)
         {
             var child = _childrensService.Get().Where(c => c.IsSelected).FirstOrDefault();
             var period = await _periodsService.Get().Where(p => p.Id == periodId).FirstOrDefaultAsync();
@@ -48,7 +50,11 @@ namespace MSUDTrack.Services
             //I'm not sure why the where's don't work right...?
             if (Get().Count() > 0)
             {
-                records = Get().Where(r => r.ChildId == child.Id).Where(r => r.PeriodId == period.Id).ToList();
+                records = Get()
+                    .Where(r => r.ChildId == child.Id)
+                    .Where(r => r.PeriodId == period.Id)
+                    .Where(r => r.Created.Date == user.CurrentView.Date)
+                    .ToList();
             }
 
             return records;

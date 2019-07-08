@@ -1,11 +1,62 @@
 ﻿@page
 @model MSUDTrack.WebApp.Pages.HistoryModel
+@inject Microsoft.AspNetCore.Identity.UserManager<MSUDTrack.DataModels.Models.ApplicationUser> userManager
 @{
     ViewData["Title"] = "History";
+
+
+    DateTime[] last14Days = Enumerable.Range(0, 14)
+        .Select(i => DateTime.Now.Date.AddDays(-i))
+        .ToArray();
 }
 
-    <section class="mdl-layout__tab-panel is-active">
-        <div class="page-content flex-column">
+@section Styles {
+    <style>
+        table {
+            width: 300px;
+        }
 
+        .is-selected {
+            background-color: #e91e6361;
+        }
+    </style>
+}
+
+<section class="mdl-layout__tab-panel is-active">
+    <div class="page-content flex-column">
+        <div class="flex flex-grow-1 justify-content-center">
+            <div class="align-text-center">
+                <h3>History</h3>
+            </div>
         </div>
-    </section>
+        <div class="flex flex-grow-1 justify-content-center">
+            <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+                <tbody>
+                    @for (int i = 0; i < last14Days.Count(); i++)
+                    {
+                        var prefix = "";
+
+                        if (i == 0)
+                        {
+                            prefix = "Today";
+                        }
+                        else if (i == 1)
+                        {
+                            prefix = "Yesterday";
+                        }
+                        else
+                        {
+                            prefix = last14Days[i].DayOfWeek.ToString();
+                        }
+
+                        var isSelected = (await userManager.GetUserAsync(User)).CurrentView.Date == last14Days[i].Date;
+
+                        <tr onclick="window.location.href = '/History?date=@(last14Days[i].ToShortDateString())'">
+                            <td class="mdl-data-table__cell--non-numeric @(isSelected ? "is-selected" : "")">@prefix (@last14Days[i].ToShortDateString())</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>

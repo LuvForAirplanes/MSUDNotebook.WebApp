@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System;
 
 namespace MSUDTrack.DataModels.Models
 {
@@ -14,6 +15,10 @@ namespace MSUDTrack.DataModels.Models
         /// The users preference of a theme for MSUD Track.
         /// </summary>
         public string Theme { get; set; }
+
+        public DateTime CurrentView { get; set; }
+
+        public DateTime CurrentViewSet { get; set; }
         /// <summary>
         /// Id of the <see cref="Models.Contact"/> associated with this user.
         /// </summary>
