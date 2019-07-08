@@ -1,5 +1,16 @@
 ﻿@inject MSUDTrack.Services.TrackerDbContext dbContext
 @inject  Microsoft.AspNetCore.Identity.UserManager<MSUDTrack.DataModels.Models.ApplicationUser> userManager
+@{
+    var user = await userManager.GetUserAsync(User);
+
+    if(user.CurrentViewSet.Date != DateTime.Now.Date)
+    {
+        user.CurrentViewSet = DateTime.Now;
+        user.CurrentView = DateTime.Now;
+
+        await userManager.UpdateAsync(user);
+    }
+}
 
 <!DOCTYPE html>
 <html>
@@ -53,7 +64,6 @@
     <body>
         @{
             var data = dbContext.Children.Where(c => c.IsActive).ToList();
-            var user = await userManager.GetUserAsync(User);
 
             var prefix = "";
 

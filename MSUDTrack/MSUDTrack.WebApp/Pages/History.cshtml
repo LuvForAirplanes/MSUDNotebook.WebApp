@@ -4,6 +4,7 @@
 @{
     ViewData["Title"] = "History";
 
+    var user = await userManager.GetUserAsync(User);
 
     DateTime[] last14Days = Enumerable.Range(0, 14)
         .Select(i => DateTime.Now.Date.AddDays(-i))
@@ -49,7 +50,7 @@
                             prefix = last14Days[i].DayOfWeek.ToString();
                         }
 
-                        var isSelected = (await userManager.GetUserAsync(User)).CurrentView.Date == last14Days[i].Date;
+                        var isSelected = user.CurrentView.Date == last14Days[i].Date;
 
                         <tr onclick="window.location.href = '/History?date=@(last14Days[i].ToShortDateString())'">
                             <td class="mdl-data-table__cell--non-numeric @(isSelected ? "is-selected" : "")">@prefix (@last14Days[i].ToShortDateString())</td>
