@@ -3,12 +3,15 @@
 @{
     var user = await userManager.GetUserAsync(User);
 
-    if(user.CurrentViewSet.Date != DateTime.Now.Date)
+    if(user != null)
     {
-        user.CurrentViewSet = DateTime.Now;
-        user.CurrentView = DateTime.Now;
+        if(user.CurrentViewSet.Date != DateTime.Now.Date)
+        {
+            user.CurrentViewSet = DateTime.Now;
+            user.CurrentView = DateTime.Now;
 
-        await userManager.UpdateAsync(user);
+            await userManager.UpdateAsync(user);
+        }
     }
 }
 
@@ -64,20 +67,22 @@
     <body>
         @{
             var data = dbContext.Children.Where(c => c.IsActive).ToList();
+            var date = "";
 
-            var prefix = "";
+            var prefix = "Today";
 
-            if(user.CurrentView.Date == DateTime.Now.Date)
+            if(user != null)
             {
-                prefix = "Today";
-            }
-            else if(user.CurrentView.Date == DateTime.Now.Date.AddDays(-1))
-            {
-                prefix = "Yesterday";
-            }
-            else
-            {
-                prefix = user.CurrentView.Date.DayOfWeek.ToString();
+                if (user.CurrentView.Date == DateTime.Now.Date.AddDays(-1))
+                {
+                    prefix = "Yesterday";
+                }
+                else
+                {
+                    prefix = user.CurrentView.Date.DayOfWeek.ToString();
+                }
+
+                date = user.CurrentView.ToShortDateString();
             }
         }
         <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-tabs">
@@ -104,7 +109,7 @@
                         var rv = ViewContext.RouteData.Values.FirstOrDefault().Value.ToString();
                     }
 
-                    <a asp-page="Today" class="mdl-layout__tab @(rv == "/Today" ? "is-active" : "")">@prefix (@(user.CurrentView.ToShortDateString()))</a>
+                    <a asp-page="Today" class="mdl-layout__tab @(rv == "/Today" ? "is-active" : "")">@prefix @(date != "" ? "(" + date + ")" : "")</a>
                     <a asp-page="History" class="mdl-layout__tab @(rv == "/History" ? "is-active" : "")">History</a>
                     <a asp-page="Settings" class="mdl-layout__tab @(rv == "/Settings" ? "is-active" : "")">Settings</a>
                 </div>
