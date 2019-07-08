@@ -1,23 +1,26 @@
 ﻿@page
 @model TodayModel
 @inject MSUDTrack.Services.FoodsService foodsService
+@inject Microsoft.AspNetCore.Identity.UserManager<MSUDTrack.DataModels.Models.ApplicationUser> userManager
 @{
     ViewData["Title"] = "Today";
+
+    var user = await userManager.GetUserAsync(User);
 }
 
-@section  Styles {
+@section Styles {
     <style>
         .period {
-            background-color:#e91e6361;
+            background-color: #e91e6361;
         }
 
-        .period > td {
-            border:0;
-            padding:16px !important;
-        }
+            .period > td {
+                border: 0;
+                padding: 16px !important;
+            }
 
         .food-select {
-            width:300px;
+            width: 300px;
         }
 
         td {
@@ -25,34 +28,34 @@
         }
 
         .nutri-inputs {
-            width:40px;
-            border:none;
+            width: 40px;
+            border: none;
         }
 
         .material-icons {
-            color:red !important;
-            font-size:20px !important;
+            color: red !important;
+            font-size: 20px !important;
         }
 
         input:focus {
-            outline:none;
+            outline: none;
         }
 
         tr {
-            width:350px !important;
-            padding:0 !important;
+            width: 350px !important;
+            padding: 0 !important;
         }
 
-        .period:hover{
-            background-color:#e91e6361 !important;
+        .period:hover {
+            background-color: #e91e6361 !important;
         }
 
         tr:hover {
-            background-color:inherit !important;
+            background-color: inherit !important;
         }
 
         .mdl-data-table {
-            width:350px;
+            width: 350px;
         }
     </style>
 }
@@ -64,20 +67,28 @@
                 @{
                     var leucineMG = Model.TodaysLog.Periods.Sum(p => p.Records.Sum(r => r.LeucineMilligrams));
                     var face = "";
-                    if(leucineMG == 0)
+                    if (leucineMG == 0)
                     {
                         face = "";
                     }
                     else if (leucineMG <= 500)
                     {
                         face = ":)";
-                    } else if (leucineMG > 500)
+                    }
+                    else if (leucineMG > 500)
                     {
                         face = ":(";
                     }
+
+                    var isToday = true;
+
+                    if(user != null)
+                    {
+                        isToday = user.CurrentView.Date == DateTime.Now.Date;
+                    }
                 }
                 <h3 class="name-title">@Model.TodaysLog.Child.Name</h3>
-                <h4 class="leucine-title">@(leucineMG)mg total/@(Model.TodaysLog.Child.LeucineDailyCount - leucineMG)mg left @face</h4>
+                <h4 class="leucine-title">@(leucineMG)mg@(isToday ? " total/" + (Model.TodaysLog.Child.LeucineDailyCount - leucineMG).ToString() + "mg left " + face : " ")</h4>
             </div>
         </div>
         <div class="flex flex-grow-1 justify-content-center">
