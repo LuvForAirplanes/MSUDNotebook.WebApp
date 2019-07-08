@@ -58,14 +58,14 @@
                 <div class="flex-row">
                     <div class="flex-grow-1 inputs">
                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                            <input class="mdl-textfield__input" type="text" id="leucine_exchange" value="@Model.Children.FirstOrDefault(c => c.IsSelected).LeucineMultiple" />
+                            <input class="mdl-textfield__input" type="number" id="leucine_exchange" value="@Model.Children.FirstOrDefault(c => c.IsSelected).LeucineMultiple" />
                             <label class="mdl-textfield__label" for="leucine_exchange">Leucine Exchange</label>
                         </div>
                     </div>
                     <div class="flex-grow-1 inputs">
                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                            <input class="mdl-textfield__input" type="text" id="leucine_exchange" value="@Model.Children.FirstOrDefault(c => c.IsSelected).LeucineMultiple" />
-                            <label class="mdl-textfield__label" for="leucine_exchange">Daily Leucine Count</label>
+                            <input class="mdl-textfield__input" type="number" id="leucine_daily_count" value="@Model.Children.FirstOrDefault(c => c.IsSelected).LeucineDailyCount" />
+                            <label class="mdl-textfield__label" for="leucine_exchange">Leucine Daily Count</label>
                         </div>
                     </div>
                 </div>

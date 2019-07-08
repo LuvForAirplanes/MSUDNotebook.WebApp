@@ -109,4 +109,22 @@ $(document).ready(function () {
             location.reload();
         });
     });
+
+    $("#leucine_exchange").on("input", function (e) {
+        if (e.target.value !== "") {
+            $.ajax({
+                type: 'PUT',
+                url: '/api/settings/exchange/' + e.target.value
+            });
+        }
+    });
+
+    $("#leucine_daily_count").on("input", function (e) {
+        if (e.target.value !== "") {
+            $.ajax({
+                type: 'PUT',
+                url: '/api/settings/dailycount/' + e.target.value
+            });
+        }
+    });
 });

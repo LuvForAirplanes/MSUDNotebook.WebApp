@@ -22,6 +22,11 @@ namespace MSUDTrack.DataModels.Models
         public double LeucineMultiple { get; set; } = 100;
 
         /// <summary>
+        /// The maximum amount of protein allowed daily.
+        /// </summary>
+        public double LeucineDailyCount { get; set; }
+
+        /// <summary>
         /// Whether or not this child is active.
         /// </summary>
         public bool IsActive { get; set; }
