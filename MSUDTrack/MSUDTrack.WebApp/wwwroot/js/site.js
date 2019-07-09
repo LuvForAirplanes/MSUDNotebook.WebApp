@@ -28,6 +28,8 @@ $(document).ready(function () {
                 elements[3].value = data.proteinGrams;
                 elements[4].value = data.leucineMilligrams;
                 elements[5].value = data.weightGrams;
+                $("#total-mg").text(data.luecineCount);
+                $("#left-mg").text(data.leucineLeft);
             }
         });
     });
@@ -81,6 +83,11 @@ $(document).ready(function () {
                     callback(res);
                 }
             });
+        },
+        onInitialize: function () {
+            var selectize = this;
+            if (selectize.getValue() === "")
+                selectize.open();
         }
     });
 

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MSUDTrack.DataModels.Models;
 using MSUDTrack.Services;
@@ -13,12 +15,14 @@ namespace MSUDTrack.WebApp.Controllers
         private readonly RecordsService _recordsService;
         private readonly ChildrensService _childrensService;
         private readonly FoodsService _foodsService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public RecordsController(RecordsService recordsService, ChildrensService childrensService, FoodsService foodsService)
+        public RecordsController(RecordsService recordsService, ChildrensService childrensService, FoodsService foodsService, UserManager<ApplicationUser> userManager)
         {
             _recordsService = recordsService;
             _childrensService = childrensService;
             _foodsService = foodsService;
+            _userManager = userManager;
         }
 
         // POST: api/Records
@@ -62,10 +66,27 @@ namespace MSUDTrack.WebApp.Controllers
                     Updated = DateTime.Now,
                     WeightGrams = record.WeightGrams
                 };
-
             }
 
-            return await _recordsService.UpdateAsync(newRecord);
+            var user = await _userManager.GetUserAsync(User);
+            var updated = await _recordsService.UpdateAsync(newRecord);
+            var child = _childrensService.GetCurrentChild();
+            var leucineTotal = _recordsService.Get().Where(r => r.Created.Date == user.CurrentView.Date).Sum(r => r.LeucineMilligrams).Value;
+
+            return new ReturnRecord()
+            {
+                ChildId = updated.ChildId,
+                Created = updated.Created,
+                Id = updated.Id,
+                LeucineLeft = child.LeucineDailyCount - leucineTotal,
+                LeucineMilligrams = updated.LeucineMilligrams,
+                LuecineCount = leucineTotal,
+                Name = updated.Name,
+                PeriodId = updated.PeriodId,
+                ProteinGrams = updated.ProteinGrams,
+                Updated = updated.Updated,
+                WeightGrams = updated.WeightGrams
+            };
         }
 
         // DELETE: api/Foods/5
@@ -104,5 +125,12 @@ namespace MSUDTrack.WebApp.Controllers
         public double? LeucineMilligrams { get; set; }
 
         public double? WeightGrams { get; set; }
+    }
+
+    public class ReturnRecord : Record
+    {
+        public double LuecineCount { get; set; }
+
+        public double LeucineLeft { get; set; }
     }
 }

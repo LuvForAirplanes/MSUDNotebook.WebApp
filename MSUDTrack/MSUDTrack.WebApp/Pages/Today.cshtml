@@ -88,7 +88,7 @@
                     }
                 }
                 <h3 class="name-title">@Model.TodaysLog.Child.Name</h3>
-                <h4 class="leucine-title">@(leucineMG)mg@(isToday ? " total/" + (Model.TodaysLog.Child.LeucineDailyCount - leucineMG).ToString() + "mg left " + face : " ")</h4>
+                <h4 class="leucine-title"><span id='total-mg'>@(leucineMG)</span><span>mg@(Html.Raw(isToday ? " total/<span id='left-mg'>" + (Model.TodaysLog.Child.LeucineDailyCount - leucineMG).ToString() + "</span>mg left " + face : " "))</span></h4>
             </div>
         </div>
         <div class="flex flex-grow-1 justify-content-center">
@@ -121,13 +121,13 @@
                                 </select>
                             </td>
                             <td>
-                                <input type="text" placeholder="P. g" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].ProteinGrams" />
+                                <input type="number" placeholder="P. g" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].ProteinGrams" />
                             </td>
                             <td>
-                                <input type="text" placeholder="L. mg" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].LeucineMilligrams" />
+                                <input type="number" placeholder="L. mg" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].LeucineMilligrams" />
                             </td>
                             <td>
-                                <input type="text" placeholder="W. g" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].WeightGrams" />
+                                <input type="number" placeholder="W. g" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].WeightGrams" />
                             </td>
                             <td>
                                 <button class="delete-button @Model.TodaysLog.Periods[i].Records[ii].Id mdl-button mdl-js-button mdl-button--icon" asp-page-handler="">
