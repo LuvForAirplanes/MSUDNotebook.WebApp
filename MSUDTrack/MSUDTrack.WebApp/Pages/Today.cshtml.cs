@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Humanizer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,19 +18,25 @@ namespace MSUDTrack.WebApp.Pages
     {
         private readonly RecordsService _recordsService;
         private readonly PeriodsService _periodsService;
+        private readonly FoodsService _foodsService;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public TodayModel(RecordsService recordsService, PeriodsService periodsService, UserManager<ApplicationUser> userManager)
+        public TodayModel(RecordsService recordsService, PeriodsService periodsService, UserManager<ApplicationUser> userManager, FoodsService foodsService)
         {
             _recordsService = recordsService;
             _periodsService = periodsService;
             _userManager = userManager;
+            _foodsService = foodsService;
         }
 
         public TodayDTO TodaysLog { get; set; } = new TodayDTO();
 
+        [BindProperty]
+        public NewFood Food { get; set; }
+
         public async Task<IActionResult> OnGetAsync()
         {
+
             ModelState.Clear();
             await LoadData();
 
@@ -43,7 +50,7 @@ namespace MSUDTrack.WebApp.Pages
         {
             await _recordsService.CreateAsync(new Record()
             {
-                Id = System.Guid.NewGuid().ToString(),
+                Id = Guid.NewGuid().ToString(),
                 ChildId = childId,
                 PeriodId = periodId,
                 Created = DateTime.Now
@@ -51,12 +58,67 @@ namespace MSUDTrack.WebApp.Pages
 
             await LoadData();
             ModelState.Clear();
-            return Page();
+            return RedirectToPage("/Today");
+        }
+
+        public async Task<IActionResult> OnPostNewFoodAsync()
+        {
+            Food.Name = Food.Name.Transform(To.TitleCase);
+
+            await _foodsService.CreateAsync(new Food()
+            {
+                Created = DateTime.Now,
+                Id = System.Guid.NewGuid().ToString(),
+                Name = Food.Name.Transform(To.TitleCase),
+                ProteinGrams = Food.ProteinGrams,
+                Updated = DateTime.Now,
+                WeightGrams = Food.ServingGrams
+            });
+
+            var record = await _recordsService.GetByIdAsync(Food.RecordId);
+
+            var newRecord = new Record()
+            {
+                Id = record.Id,
+                ChildId = record.ChildId,
+                Created = record.Created,
+                Name = Food.Name,
+                PeriodId = record.PeriodId,
+                ProteinGrams = Food.ProteinGrams,
+                Updated = DateTime.Now,
+                WeightGrams = Food.ServingGrams
+            };
+
+            await _recordsService.UpdateAsync(newRecord);
+
+            await LoadData();
+            ModelState.Clear();
+            return RedirectToPage("/Today");
+        }
+
+        public async Task<IActionResult> OnPostDeleteRecordAsync(string recordId)
+        {
+            await _recordsService.DeleteAsync(recordId);
+
+            await LoadData();
+            ModelState.Clear();
+            return RedirectToPage("/Today");
         }
 
         public async Task LoadData()
         {
             TodaysLog = await _recordsService.GetTodaysRecordsByCurrentChildAsync(await _userManager.GetUserAsync(User));
         }
+    }
+
+    public class NewFood
+    {
+        public string RecordId { get; set; }
+
+        public string Name { get; set; }
+
+        public double ProteinGrams { get; set; }
+
+        public double ServingGrams { get; set; }
     }
 }

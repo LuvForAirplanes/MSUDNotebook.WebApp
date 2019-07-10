@@ -34,18 +34,6 @@ $(document).ready(function () {
         });
     });
 
-    $(".delete-button").on("click", function (e) {
-        //here goes the api post
-        var targetId = $(this).attr('class').split(' ')[1];
-
-        $.ajax({
-            type: 'DELETE',
-            url: '/api/Records/' + targetId
-        }).done(function () {
-            location.reload();
-        });
-    });
-
     $("#child-select").on("input", function (e) {
         $.ajax({
             type: 'GET',
@@ -71,7 +59,16 @@ $(document).ready(function () {
         valueField: 'id',
         labelField: 'name',
         searchField: 'name',
-        create: false,
+        create: function (input) {
+            var targetId = $(this.$input).attr('class').split(' ')[1];
+
+            $("#Food_Name").val(input);
+            $("#Food_RecordId").val(targetId);
+
+            showDiag();
+
+            $("#Food_ProteinGrams").focus();
+        },
         load: function (query, callback) {
             $.ajax({
                 url: "api/Foods?query=" + query + "&page_limit=10",

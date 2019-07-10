@@ -34,10 +34,11 @@ namespace MSUDTrack.WebApp.Controllers
 
             //here the food to record mapping is done, the actual count conversions are done in the service
             var existing = await _recordsService.GetByIdAsync(record.Id);
-            var food = await _foodsService.GetByIdAsync(record.FoodId);
             Record newRecord;
             if (!string.IsNullOrEmpty(record.FoodId))
             {
+                var food = await _foodsService.GetByIdAsync(record.FoodId);
+
                 newRecord = new Record()
                 {
                     Id = record.Id,
