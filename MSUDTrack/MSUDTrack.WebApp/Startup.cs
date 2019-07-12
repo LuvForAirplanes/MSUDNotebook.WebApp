@@ -102,6 +102,11 @@ namespace MSUDTrack.WebApp
             services.AddSolidMapper(new Assembly[] {
                 typeof(Startup).GetTypeInfo().Assembly
             });
+
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

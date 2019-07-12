@@ -83,8 +83,23 @@ $(document).ready(function () {
         },
         onInitialize: function () {
             var selectize = this;
-            if (selectize.getValue() === "")
-                selectize.open();
+            if (selectize.getValue() === "") {
+                //get this's id
+                var id = this.$input.context.className.split(' ')[1];
+
+                //get adjacent div
+                var div = $("." + id)[1].children[0];
+                var input = div.children[0];
+
+                //set required attributes
+                div.classList.add("focus");
+                div.classList.add("input-active");
+                input.setAttribute("style", "width: 91px; opacity: 1; position: relative; left: 0px;");
+
+                input.focus();
+                input.click();
+            }
+                //selectize.open();
         }
     });
 

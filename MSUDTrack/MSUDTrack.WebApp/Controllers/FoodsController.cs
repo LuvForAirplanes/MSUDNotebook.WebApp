@@ -29,7 +29,7 @@ namespace MSUDTrack.WebApp.Controllers
             return await _foodsService.Get()
                 .Where(f => f.Name 
                     .ToLower() 
-                    .Contains(query))
+                    .Contains(query.ToLower()))
                 .Take(page_limit)
                 .ToListAsync();
         }
