@@ -52,6 +52,9 @@ namespace MSUDTrack.WebApp.Controllers
                     WeightGrams = food.WeightGrams
                 };
 
+                food.TimesUsed += 1;
+                food.LastUsed = DateTime.Now;
+                await _foodsService.UpdateAsync(food, food.Id);
             }
             else
             {

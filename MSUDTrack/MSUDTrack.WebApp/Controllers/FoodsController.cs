@@ -31,6 +31,8 @@ namespace MSUDTrack.WebApp.Controllers
                     .ToLower() 
                     .Contains(query.ToLower()))
                 .Take(page_limit)
+                .OrderBy(f => f.LastUsed)
+                .OrderBy(f => f.TimesUsed)
                 .ToListAsync();
         }
 

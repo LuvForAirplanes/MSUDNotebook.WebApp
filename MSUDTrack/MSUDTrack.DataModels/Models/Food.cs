@@ -26,6 +26,19 @@ namespace MSUDTrack.DataModels.Models
         /// </summary>
         public double? WeightGrams { get; set; }
 
+        /// <summary>
+        /// The Manufacturer of this food.
+        /// </summary>
         public string Manufacturer { get; set; }
+
+        /// <summary>
+        /// The last time this food was used.
+        /// </summary>
+        public DateTime LastUsed { get; set; }
+
+        /// <summary>
+        /// How many times this food was used.
+        /// </summary>
+        public int TimesUsed { get; set; }
     }
 }
