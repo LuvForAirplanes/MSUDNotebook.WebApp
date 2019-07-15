@@ -81,6 +81,14 @@ $(document).ready(function () {
                 }
             });
         },
+        render: {
+            option: function (item, escape) {
+                return '<div>'
+                    + '<span class="title">' + item.name + '</span> '
+                    + '<span class="description">' + item.manufacturer + '</span> '
+                    + '</div>';
+            }
+        },
         onInitialize: function () {
             var selectize = this;
             if (selectize.getValue() === "") {

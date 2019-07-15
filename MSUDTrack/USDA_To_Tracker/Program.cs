@@ -64,21 +64,23 @@ namespace USDA_To_Tracker
                         Id = Guid.NewGuid().ToString(),
                         NDB_Number = chooitem.ValuesArray[0].Replace('"', ' ').Trim().Trim('"'),
                         Name = chooitem.ValuesArray[1].Trim().Replace('"', ' ').Trim('"'),
-                        UPC = chooitem.ValuesArray[3].Trim().Replace('"', ' ').Trim('"')
+                        UPC = chooitem.ValuesArray[3].Trim().Replace('"', ' ').Trim('"'),
+                        Manufacturer = chooitem.ValuesArray[4].Trim().Replace('"', ' ').Trim('"')
                     };
                      
                     var leucineMg = usda_nutrients.FirstOrDefault(n => n.NDB_Number == usda_food.NDB_Number && n.Name == "Leucine");
                     var proteinMg = usda_nutrients.FirstOrDefault(n => n.NDB_Number == usda_food.NDB_Number && n.Name == "Protein");
                     var weightGm = usda_servingSizes.FirstOrDefault(n => n.NDB_Number == usda_food.NDB_Number);
 
-                    if ((leucineMg != null || proteinMg != null) && weightGm != null)
+                    if ((leucineMg != null || proteinMg != null) && weightGm != null && !string.IsNullOrEmpty(weightGm.ServingSize) && !string.IsNullOrEmpty(usda_food.Manufacturer))
                     {
                         var food = new Food()
                         {
                             Id = usda_food.Id,
                             Created = DateTime.Now,
                             Name = usda_food.Name.Replace(",", " ").ToLower().Transform(To.TitleCase),
-                            WeightGrams = double.Parse(weightGm.ServingSize)
+                            WeightGrams = double.Parse(weightGm.ServingSize),
+                            Manufacturer = usda_food.Manufacturer.Replace(",", " ").ToLower().Transform(To.TitleCase)
                         };
 
                         if (leucineMg != null)
@@ -91,7 +93,7 @@ namespace USDA_To_Tracker
                         {
                             using (var tw = new StreamWriter(@"C:\Output\Output.csv", true))
                             {
-                                tw.WriteLine(food.Id + "," + "2019-07-02 00:00:00" + "," + "2019-07-02 00:00:00" + "," + food.Name + "," + food.ProteinGrams + "," + food.LeucineMilligrams + "," + food.WeightGrams);
+                                tw.WriteLine(food.Id + "," + "2019-07-02 00:00:00" + "," + "2019-07-02 00:00:00" + "," + food.Name + "," + food.ProteinGrams + "," + food.LeucineMilligrams + "," + food.WeightGrams + "," + food.Manufacturer);
                             }
                         }
                     }

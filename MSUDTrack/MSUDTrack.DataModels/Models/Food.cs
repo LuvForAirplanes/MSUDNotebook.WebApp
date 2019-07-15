@@ -25,5 +25,7 @@ namespace MSUDTrack.DataModels.Models
         /// The weight of the food consumed, in grams.
         /// </summary>
         public double? WeightGrams { get; set; }
+
+        public string Manufacturer { get; set; }
     }
 }

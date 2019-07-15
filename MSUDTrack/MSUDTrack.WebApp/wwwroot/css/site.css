@@ -122,3 +122,35 @@ select > option {
 .hidden {
     display:none;
 }
+
+.title {
+    display: block;
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.description {
+    font-size: 12px;
+    display: block;
+    opacity: 0.5;
+    white-space: nowrap;
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.selectize-dropdown.food-select {
+    width:354.56px !important;
+}
+
+div[data-value='default'] {
+    padding-top: 10px;
+    white-space: nowrap;
+    width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.create {
+    padding: 10px;
+}
