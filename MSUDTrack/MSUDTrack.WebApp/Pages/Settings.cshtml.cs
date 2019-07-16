@@ -23,7 +23,7 @@ namespace MSUDTrack.WebApp.Pages
         [BindProperty]
         public List<Child> Children { get; set; } = new List<Child>();
         [BindProperty]
-        public Child NewChild { get; set; } = new Child() { Id = Guid.NewGuid().ToString(), IsActive = true };
+        public Child NewChild { get; set; } = new Child() { Id = Guid.NewGuid().ToString(), IsActive = true, Birthday = new DateTime(2010, 1, 1) };
 
         public void OnGet()
         {
@@ -34,7 +34,7 @@ namespace MSUDTrack.WebApp.Pages
         {
             ModelState.Clear();
 
-            NewChild = new Child() { Id = Guid.NewGuid().ToString(), IsActive = true, IsSelected = true };
+            NewChild = new Child() { Id = Guid.NewGuid().ToString(), IsActive = true, IsSelected = true, Birthday = new DateTime(2010, 1, 1) };
             Children = _childrensService.Get().ToList();
         }
 

@@ -20,11 +20,11 @@
 <form method="post">
     <section class="mdl-layout__tab-panel is-active">
         <div class="page-content flex-column">
-            <div class="flex flex-grow-1 justify-content-center">
+            @*<div class="flex flex-grow-1 justify-content-center">
                 <select style="margin-top:10px">
                     <option>Purple - Red</option>
                 </select>
-            </div>
+            </div>*@
             <div class="flex flex-grow-1 justify-content-center">
                 <ul class="demo-list-control mdl-list">
                     @for (int i = 0; i < Model.Children.Count; i++)
@@ -106,7 +106,7 @@
                 </div>
                 <div>
                     <label>Birthday</label>
-                    <input asp-for="NewChild.Birthday" />
+                    <input asp-for="NewChild.Birthday" type="date" />
                 </div>
             </div>
             <div class="mdl-dialog__actions">

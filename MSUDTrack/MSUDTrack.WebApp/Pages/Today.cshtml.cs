@@ -72,7 +72,9 @@ namespace MSUDTrack.WebApp.Pages
                 Name = Food.Name.Transform(To.TitleCase),
                 ProteinGrams = Food.ProteinGrams,
                 Updated = DateTime.Now,
-                WeightGrams = Food.ServingGrams
+                WeightGrams = Food.ServingGrams,
+                LastUsed = DateTime.Now,
+                TimesUsed = 1
             });
 
             var record = await _recordsService.GetByIdAsync(Food.RecordId);
