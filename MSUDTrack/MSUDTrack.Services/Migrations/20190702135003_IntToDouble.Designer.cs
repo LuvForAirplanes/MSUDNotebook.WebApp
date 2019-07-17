@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MSUDTrack.Services.Migrations
 {
     [DbContext(typeof(TrackerDbContext))]
-    [Migration("20190601103249_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20190702135003_IntToDouble")]
+    partial class IntToDouble
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -98,17 +98,118 @@ namespace MSUDTrack.Services.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("MSUDTrack.DataModels.Models.Item", b =>
+            modelBuilder.Entity("MSUDTrack.DataModels.Models.Child", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnName("id");
 
+                    b.Property<DateTime>("Birthday")
+                        .HasColumnName("birthday");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnName("created");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnName("is_active");
+
+                    b.Property<bool>("IsSelected");
+
                     b.Property<string>("Name")
                         .HasColumnName("name");
 
+                    b.Property<DateTime>("Updated")
+                        .HasColumnName("updated");
+
                     b.HasKey("Id");
 
-                    b.ToTable("items");
+                    b.ToTable("children");
+                });
+
+            modelBuilder.Entity("MSUDTrack.DataModels.Models.Food", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnName("created");
+
+                    b.Property<double?>("LeucineMilligrams")
+                        .HasColumnName("leucine_milligrams");
+
+                    b.Property<string>("Name")
+                        .HasColumnName("name");
+
+                    b.Property<double?>("ProteinGrams")
+                        .HasColumnName("protein_grams");
+
+                    b.Property<DateTime>("Updated")
+                        .HasColumnName("updated");
+
+                    b.Property<double?>("WeightGrams");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("foods");
+                });
+
+            modelBuilder.Entity("MSUDTrack.DataModels.Models.Period", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnName("created");
+
+                    b.Property<string>("Name")
+                        .HasColumnName("name");
+
+                    b.Property<DateTime>("PeriodEnd")
+                        .HasColumnName("period_end");
+
+                    b.Property<DateTime>("PeriodStart")
+                        .HasColumnName("period_start");
+
+                    b.Property<DateTime>("Updated")
+                        .HasColumnName("updated");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("periods");
+                });
+
+            modelBuilder.Entity("MSUDTrack.DataModels.Models.Record", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnName("id");
+
+                    b.Property<string>("ChildId");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnName("created");
+
+                    b.Property<double?>("LeucineMilligrams")
+                        .HasColumnName("leucine_milligrams");
+
+                    b.Property<string>("Name")
+                        .HasColumnName("name");
+
+                    b.Property<string>("PeriodId");
+
+                    b.Property<double?>("ProteinGrams")
+                        .HasColumnName("protein_grams");
+
+                    b.Property<DateTime>("Updated")
+                        .HasColumnName("updated");
+
+                    b.Property<double?>("WeightGrams");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChildId");
+
+                    b.HasIndex("PeriodId");
+
+                    b.ToTable("records");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -193,6 +294,19 @@ namespace MSUDTrack.Services.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("MSUDTrack.DataModels.Models.Record", b =>
+                {
+                    b.HasOne("MSUDTrack.DataModels.Models.Child", "Child")
+                        .WithMany()
+                        .HasForeignKey("ChildId")
+                        .HasConstraintName("records_childid_fkey");
+
+                    b.HasOne("MSUDTrack.DataModels.Models.Period", "Period")
+                        .WithMany()
+                        .HasForeignKey("PeriodId")
+                        .HasConstraintName("records_periodid_fkey");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -6,58 +6,66 @@
     ViewData["Title"] = "Log in";
 }
 
-<div class="flex-column align-items-center">
-    @if (env.IsStaging())
-    {
-        <div class="ui warning message" style="max-width: 430px;">
-            <div class="ui header">Warning!</div>
-            <p>This demo app is public. You may modify or add to the data but <strong>Please DON'T enter valid personal information!</strong></p>
-            <p>The original data contained herein is randomly generated. </p>
-            <p>The data (and your login) may be deleted or reset at any time.</p>
-        </div>
+<style>
+
+    .demo-card-wide > .mdl-card__title {
+        color: #fff;
+        height: 176px;
+        background: url('https://res.cloudinary.com/luvforairplanes/image/upload/v1562365194/sample.jpg') center / cover;
     }
-    <div class="ui card raised">
-        <div class="content">
-            <span class="header">Log In</span>
-            <div class="xs-pl-20 xs-pr-20">
-                <form method="post" class="ui form">
-                    <div asp-validation-summary="All" class="text-danger"></div>
-                    <div class="field">
-                        <label asp-for="Input.Username"></label>
-                        <input asp-for="Input.Username" autofocus />
-                        <span asp-validation-for="Input.Username" class="text-danger"></span>
+
+    .demo-card-wide > .mdl-card__menu {
+        color: #fff;
+    }
+
+    .mdl-card__supporting-text {
+        padding: 28px;
+    }
+
+    .mdl-textfield {
+        width: 260px;
+    }
+
+    .mdl-button {
+        width: 260px;
+    }
+
+    button:last-child {
+        margin-top:10px;
+    }
+</style>
+<form asp-route-returnUrl="@Model.ReturnUrl" method="post" class="ui form">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <section class="mdl-layout__tab-panel is-active">
+        <div class="page-content flex-column">
+            <div class="flex flex-grow-1 justify-content-center">
+                <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+                    <div class="mdl-card__title">
+                        <h2 class="mdl-card__title-text">Welcome back</h2>
                     </div>
-                    <div class="field">
-                        <label asp-for="Input.Password"></label>
-                        <input asp-for="Input.Password" />
-                        <span asp-validation-for="Input.Password" class="text-danger"></span>
-                    </div>
-                    <div class="field">
-                        <div class="ui checkbox">
-                            <input asp-for="Input.RememberMe" />
-                            <label asp-for="Input.RememberMe">
-                                @Html.DisplayNameFor(m => m.Input.RememberMe)
-                            </label>
+                    <div class="mdl-card__supporting-text">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input class="mdl-textfield__input" type="text" id="sample3" asp-for="Input.Username">
+                            <label class="mdl-textfield__label" for="sample3">Username</label>
+                            <span asp-validation-for="Input.Username" class="text-danger"></span>
                         </div>
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input class="mdl-textfield__input" type="password" id="sample3" asp-for="Input.Password">
+                            <label class="mdl-textfield__label" for="sample3">Password</label>
+                            <span asp-validation-for="Input.Password" class="text-danger"></span>
+                        </div>
+                        <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                            Log in
+                        </button>
+                        <button asp-page-handler="" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" onclick="window.location.href = '/account/register';return false;">
+                            Register
+                        </button>
                     </div>
-                    <button type="submit" class="ui button">Log in</button>
-                </form>
-                <div>
-                    <a asp-page="./ForgotPassword">Forgot your password?</a>
-                </div>
-                <div>
-                    <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
                 </div>
             </div>
         </div>
-    </div>
-    @if (env.IsStaging())
-    {
-        <div class="ui message" style="max-width: 430px; text-align: center;">
-            <p>Send questions, suggestions or bug reports to: <a href="mailto:support@thettpost.com">support@thettpost.com</a></p>
-        </div>
-    }
-</div>
+    </section>
+</form>
 
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")

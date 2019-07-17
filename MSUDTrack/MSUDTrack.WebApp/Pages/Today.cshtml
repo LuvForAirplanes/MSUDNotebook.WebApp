@@ -1,16 +1,200 @@
 ﻿@page
 @model TodayModel
+@inject MSUDTrack.Services.FoodsService foodsService
+@inject Microsoft.AspNetCore.Identity.UserManager<MSUDTrack.DataModels.Models.ApplicationUser> userManager
 @{
     ViewData["Title"] = "Today";
+
+    var user = await userManager.GetUserAsync(User);
+}
+
+@section Styles {
+    <style>
+        .period {
+            background-color: #e91e6361;
+        }
+
+            .period > td {
+                border: 0;
+                padding: 16px !important;
+            }
+
+        .food-select {
+            width: 210px;
+        }
+
+        td {
+            padding: 0 !important;
+        }
+
+        td:nth-child(2) > input {
+            width: 40px;
+            border: none;
+        }
+
+        td:nth-child(3) > input {
+            width: 40px;
+            border: none;
+        }
+
+        td:nth-child(4) > input {
+            width: 30px;
+            border: none;
+        }
+
+        .material-icons {
+            color: red !important;
+            font-size: 20px !important;
+        }
+
+        input:focus {
+            outline: none;
+        }
+
+        .period:hover {
+            background-color: #e91e6361 !important;
+        }
+
+        tr:hover {
+            background-color: inherit !important;
+        }
+
+        .mdl-data-table {
+            width: 350px;
+        }
+
+        .new-food-inputs {
+            width:40px;
+        }
+
+        .new-food-name {
+            width:300px;
+        }
+    </style>
 }
 
 <section class="mdl-layout__tab-panel is-active">
-    <div class="page-content flex-column">
-        <div class="flex flex-grow-1 justify-content-center">
-            <div class="align-text-center">
-                <h3 class="name-title">Geneva</h3>
-                <h4 class="leucine-title">Today 55mg :)</h4>
+    <form method="post" novalidate>
+        <div class="page-content flex-column">
+            <div class="flex flex-grow-1 justify-content-center">
+                <div class="align-text-center">
+                    @{
+                        var leucineMG = Model.TodaysLog.Periods.Sum(p => p.Records.Sum(r => r.LeucineMilligrams));
+                        var face = "";
+                        if (leucineMG == 0)
+                        {
+                            face = "";
+                        }
+                        else if (leucineMG <= 500)
+                        {
+                            face = ":)";
+                        }
+                        else if (leucineMG > 500)
+                        {
+                            face = ":(";
+                        }
+
+                        var isToday = true;
+
+                        if (user != null)
+                        {
+                            isToday = user.CurrentView.Date == DateTime.Now.Date;
+                        }
+                    }
+                    <h3 class="name-title">@Model.TodaysLog.Child.Name</h3>
+                    <h4 class="leucine-title"><span id='total-mg'>@(leucineMG)</span><span>mg@(Html.Raw(isToday ? " total/<span id='left-mg'>" + (Model.TodaysLog.Child.LeucineDailyCount - leucineMG).ToString() + "</span>mg left " + face : " "))</span></h4>
+                </div>
+            </div>
+            <div class="flex flex-grow-1 justify-content-center">
+                <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                    <thead>
+
+                    </thead>
+                    @for (int i = 0; i < Model.TodaysLog.Periods.Count; i++)
+                    {
+                        <tr class="add-button @Model.TodaysLog.Periods[i].Period.Id period">
+                            <td class="mdl-data-table__cell--non-numeric" colspan="5">
+                                <span class="mdl-list__item-primary-content">
+                                    @Model.TodaysLog.Periods[i].Period.Name
+                                </span>
+                            </td>
+                        </tr>
+                        @for (int ii = 0; ii < Model.TodaysLog.Periods[i].Records.Count; ii++)
+                        {
+                            <tr>
+                                <td class="mdl-data-table__cell--non-numeric">
+                                    <select class="food-select @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].Name">
+                                        @if (Model.TodaysLog.Periods[i].Records[ii].Name == null)
+                                        {
+                                            <option value="" disabled selected>Select a food...</option>
+                                        }
+                                        @if (Model.TodaysLog.Periods[i].Records[ii].Name != null)
+                                        {
+                                            <option selected="selected" value="default">@Model.TodaysLog.Periods[i].Records[ii].Name</option>
+                                        }
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="number" placeholder="P. g" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].ProteinGrams" />
+                                </td>
+                                <td>
+                                    <input type="number" placeholder="L. mg" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].LeucineMilligrams" />
+                                </td>
+                                <td>
+                                    <input type="number" placeholder="W. g" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].WeightGrams" />
+                                </td>
+                                <td>
+                                    <button type="submit" class="delete-button @Model.TodaysLog.Periods[i].Records[ii].Id mdl-button mdl-js-button mdl-button--icon" asp-page-handler="DeleteRecord" asp-route-recordId="@Model.TodaysLog.Periods[i].Records[ii].Id">
+                                        <i class="material-icons">delete</i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </table>
             </div>
         </div>
-    </div>
+        <dialog class="mdl-dialog">
+            <h4 class="mdl-dialog__title">Add Food</h4>
+            <div class="mdl-dialog__content">
+                <input type="hidden" value="" asp-for="Food.RecordId" />
+                <div class="flex-row">
+                    <div class="flex-grow-1">
+                        <label>Name</label>
+                        <input type="text" class="new-food-name" asp-for="Food.Name" />
+                    </div>
+                    <div class="flex-grow-1">
+                        <label>Protein</label>
+                        <input class="new-food-inputs" asp-for="Food.ProteinGrams" />
+                    </div>
+                    <div class="flex-grow-1">
+                        <label>Weight</label>
+                        <input type="number" class="new-food-inputs" asp-for="Food.ServingGrams" />
+                    </div>
+                </div>
+            </div>
+            <div class="mdl-dialog__actions">
+                <button class="mdl-button" asp-page-handler="NewFood">Save</button>
+                <button type="button" class="mdl-button close">Cancel</button>
+            </div>
+        </dialog>
+    </form>
 </section>
+
+@section Scripts  {
+    <script>
+        var dialog = document.querySelector('dialog');
+
+        if (!dialog.showModal) {
+            dialogPolyfill.registerDialog(dialog);
+        }
+
+        dialog.querySelector('.close').addEventListener('click', function () {
+            dialog.close();
+        });
+
+        function showDiag() {
+            dialog.showModal();
+        }
+    </script>
+}

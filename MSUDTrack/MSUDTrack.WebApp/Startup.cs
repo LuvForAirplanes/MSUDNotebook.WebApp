@@ -16,6 +16,8 @@ using MSUDTrack.Services;
 using MSUDTrack.DataModels.Models;
 using System.Net;
 using Microsoft.AspNetCore.HttpOverrides;
+using SolidMapper;
+using System.Reflection;
 
 namespace MSUDTrack.WebApp
 {
@@ -56,15 +58,15 @@ namespace MSUDTrack.WebApp
             {
                 // Password settings
                 options.Password.RequireDigit = false;
-                options.Password.RequiredLength = 4;
+                options.Password.RequiredLength = 6;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireLowercase = false;
                 options.Password.RequiredUniqueChars = 0;
 
                 // Lockout settings
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
-                options.Lockout.MaxFailedAccessAttempts = 6;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(4320);
+                options.Lockout.MaxFailedAccessAttempts = 10;
                 options.Lockout.AllowedForNewUsers = true;
             });
 
@@ -92,7 +94,19 @@ namespace MSUDTrack.WebApp
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            //services.AddScoped<UserManager<IdentityUser>>();
+            services.AddScoped<ChildrensService>();
+            services.AddScoped<FoodsService>();
+            services.AddScoped<PeriodsService>();
+            services.AddScoped<RecordsService>();
+            services.AddScoped<SeedDataService>();
+            services.AddSolidMapper(new Assembly[] {
+                typeof(Startup).GetTypeInfo().Assembly
+            });
+
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

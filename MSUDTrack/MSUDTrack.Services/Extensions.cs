@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Microsoft.AspNetCore.Mvc
@@ -32,6 +33,11 @@ namespace Microsoft.AspNetCore.Mvc
                 pageHandler: null,
                 values: new { userId, code },
                 protocol: scheme);
+        }
+
+        public static bool ContainsAny(this string haystack, IEnumerable<string> needles)
+        {
+            return needles.Any(haystack.Contains);
         }
     }
 }

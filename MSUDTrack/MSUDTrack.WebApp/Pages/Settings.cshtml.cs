@@ -2,16 +2,55 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using MSUDTrack.DataModels.Models;
+using MSUDTrack.Services;
 
 namespace MSUDTrack.WebApp.Pages
 {
+    [Authorize]
     public class SettingsModel : PageModel
     {
+        private readonly ChildrensService _childrensService;
+
+        public SettingsModel(ChildrensService childrensService)
+        {
+            _childrensService = childrensService;
+        }
+
+        [BindProperty]
+        public List<Child> Children { get; set; } = new List<Child>();
+        [BindProperty]
+        public Child NewChild { get; set; } = new Child() { Id = Guid.NewGuid().ToString(), IsActive = true, Birthday = new DateTime(2010, 1, 1) };
+
         public void OnGet()
         {
+            Children = _childrensService.Get().ToList();
+        }
 
+        public void InitData()
+        {
+            ModelState.Clear();
+
+            NewChild = new Child() { Id = Guid.NewGuid().ToString(), IsActive = true, IsSelected = true, Birthday = new DateTime(2010, 1, 1) };
+            Children = _childrensService.Get().ToList();
+        }
+
+        public async Task OnPostAddChildAsync()
+        {
+            NewChild.IsSelected = true;
+            await _childrensService.CreateAsync(NewChild);
+
+            InitData();
+        }
+
+        public async Task OnPostDeleteChildAsync(string id)
+        {
+            await _childrensService.DeleteAsync(id);
+
+            InitData();
         }
     }
 }
