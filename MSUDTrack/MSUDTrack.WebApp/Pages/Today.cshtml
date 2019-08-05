@@ -23,6 +23,10 @@
             width: 100%;
         }
 
+        .selectize-input {
+            max-width:160.8px;
+        }
+
         td {
             padding: 0 !important;
         }
@@ -65,11 +69,12 @@
         }
 
         .new-food-inputs {
-            width:40px;
+            width:100px;
         }
 
-        .new-food-name {
-            width:300px;
+        .mdl-dialog {
+            width:100%;
+            max-width:500px;
         }
     </style>
 }
@@ -156,18 +161,22 @@
             <h4 class="mdl-dialog__title">Add Food</h4>
             <div class="mdl-dialog__content">
                 <input type="hidden" value="" asp-for="Food.RecordId" />
-                <div class="flex-row">
-                    <div class="flex-grow-1">
-                        <label>Name</label>
-                        <input type="text" class="new-food-name" asp-for="Food.Name" />
+                <div class="flex flex-row">
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label new-food-name">
+                        <input type="text" class="mdl-textfield__input" id="sample1" asp-for="Food.Name" />
+                        <label class="mdl-textfield__label" for="sample1">Name</label>
                     </div>
-                    <div class="flex-grow-1">
-                        <label>Protein</label>
-                        <input class="new-food-inputs" asp-for="Food.ProteinGrams" />
+                    <br />
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label new-food-inputs">
+                        <input class="mdl-textfield__input" pattern="-?[0-9]*(\.[0-9]+)?" asp-for="Food.ProteinGrams" id="sample2" />
+                        <label class="mdl-textfield__label" for="sample2">Protein</label>
+                        <span class="mdl-textfield__error">Input is not a number!</span>
                     </div>
-                    <div class="flex-grow-1">
-                        <label>Weight</label>
-                        <input type="number" class="new-food-inputs" asp-for="Food.ServingGrams" />
+                    <br />
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label  new-food-inputs">
+                        <input class="mdl-textfield__input" pattern="-?[0-9]*(\.[0-9]+)?" asp-for="Food.ServingGrams" id="sample3" />
+                        <label class="mdl-textfield__label" for="sample3">Weight</label>
+                        <span class="mdl-textfield__error">Input is not a number!</span>
                     </div>
                 </div>
             </div>
@@ -194,5 +203,10 @@
         function showDiag() {
             dialog.showModal();
         }
+
+        $("input").on('focus', function() {
+            document.querySelector(this
+            ).scrollIntoView();
+});
     </script>
 }

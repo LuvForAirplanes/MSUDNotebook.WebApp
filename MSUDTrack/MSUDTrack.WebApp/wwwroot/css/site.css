@@ -146,7 +146,7 @@ select > option {
 div[data-value='default'] {
     padding-top: 10px;
     white-space: nowrap;
-    width: 200px;
+    width:100%;
     overflow: hidden;
     text-overflow: ellipsis;
 }

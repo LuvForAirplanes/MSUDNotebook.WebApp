@@ -62,8 +62,9 @@ $(document).ready(function () {
         create: function (input) {
             var targetId = $(this.$input).attr('class').split(' ')[1];
 
-            $("#Food_Name").val(input);
+            $("#sample1").val(input);
             $("#Food_RecordId").val(targetId);
+            $(".mdl-textfield").first().addClass("is-dirty");
 
             showDiag();
 
