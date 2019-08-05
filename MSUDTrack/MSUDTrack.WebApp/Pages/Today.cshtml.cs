@@ -36,7 +36,6 @@ namespace MSUDTrack.WebApp.Pages
 
         public async Task<IActionResult> OnGetAsync()
         {
-
             ModelState.Clear();
             await LoadData();
 
@@ -44,21 +43,6 @@ namespace MSUDTrack.WebApp.Pages
                 return RedirectToPage("/Settings");
 
             return Page();
-        }
-
-        public async Task<IActionResult> OnPostAddRecordAsync(string periodId, string childId)
-        {
-            await _recordsService.CreateAsync(new Record()
-            {
-                Id = Guid.NewGuid().ToString(),
-                ChildId = childId,
-                PeriodId = periodId,
-                Created = DateTime.Now
-            });
-
-            await LoadData();
-            ModelState.Clear();
-            return RedirectToPage("/Today");
         }
 
         public async Task<IActionResult> OnPostNewFoodAsync()
@@ -74,7 +58,8 @@ namespace MSUDTrack.WebApp.Pages
                 Updated = DateTime.Now,
                 WeightGrams = Food.ServingGrams,
                 LastUsed = DateTime.Now,
-                TimesUsed = 1
+                TimesUsed = 1,
+                Manufacturer = ""
             });
 
             var record = await _recordsService.GetByIdAsync(Food.RecordId);

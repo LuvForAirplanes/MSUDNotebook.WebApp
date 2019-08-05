@@ -108,6 +108,12 @@ namespace MSUDTrack.WebApp.Controllers
         [HttpPut("{periodId}")]
         public async Task<ActionResult<Record>> PutRecord(string periodId)
         {
+            if ((await _userManager.GetUserAsync(User)).CurrentView.Date != DateTime.Now.Date)
+            {
+                ModelState.Clear();
+                return RedirectToPage("/Today");
+            }
+
             return await _recordsService.CreateAsync(new Record()
             {
                 Id = Guid.NewGuid().ToString(),
