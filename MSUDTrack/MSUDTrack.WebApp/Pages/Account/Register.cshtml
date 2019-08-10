@@ -39,6 +39,11 @@
                     </div>
                     <div class="mdl-card__supporting-text">
                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input class="mdl-textfield__input" type="text" id="sample3" asp-for="Input.LastName">
+                            <label class="mdl-textfield__label" for="sample3">Last Name</label>
+                            <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                        </div>
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                             <input class="mdl-textfield__input" type="text" id="sample3" asp-for="Input.Username">
                             <label class="mdl-textfield__label" for="sample3">Username</label>
                             <span asp-validation-for="Input.Username" class="text-danger"></span>

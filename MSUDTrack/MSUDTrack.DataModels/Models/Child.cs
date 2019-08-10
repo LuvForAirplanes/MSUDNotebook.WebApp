@@ -31,9 +31,8 @@ namespace MSUDTrack.DataModels.Models
         /// </summary>
         public bool IsActive { get; set; }
 
-        /// <summary>
-        /// Indicates whether or not this child is currently being edited.
-        /// </summary>
-        public bool IsSelected { get; set; }
+        public Family Family { get; set; }
+
+        public string FamilyId { get; set; }
     }
 }

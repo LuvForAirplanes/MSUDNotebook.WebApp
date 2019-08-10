@@ -19,6 +19,14 @@ namespace MSUDTrack.DataModels.Models
         public DateTime CurrentView { get; set; }
 
         public DateTime CurrentViewSet { get; set; }
+
+        public Family Family { get; set; }
+
+        public string FamilyId { get; set; }
+
+        public Child Child { get; set; }
+
+        public string ChildId { get; set; }
         /// <summary>
         /// Id of the <see cref="Models.Contact"/> associated with this user.
         /// </summary>

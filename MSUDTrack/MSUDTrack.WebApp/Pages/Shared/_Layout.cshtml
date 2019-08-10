@@ -1,5 +1,6 @@
 ﻿@inject MSUDTrack.Services.TrackerDbContext dbContext
 @inject  Microsoft.AspNetCore.Identity.UserManager<MSUDTrack.DataModels.Models.ApplicationUser> userManager
+@using Microsoft.EntityFrameworkCore;
 @{
     var user = await userManager.GetUserAsync(User);
 
@@ -67,23 +68,28 @@
 </head>
     <body>
         @{
-            var data = dbContext.Children.Where(c => c.IsActive).ToList();
-            var date = "";
+            var data = new List<MSUDTrack.DataModels.Models.Child>();
+            if(user != null)
+            {
+                data = dbContext.Families.Where(c => c.Id == user.FamilyId).Include(f => f.Children).FirstOrDefault().Children.ToList();
+            }
 
             var prefix = "Today";
 
             if(user != null)
             {
-                if (user.CurrentView.Date == DateTime.Now.Date.AddDays(-1))
+                if(user.CurrentView.Date == DateTime.Now.Date)
+                {
+                    prefix = "Today";
+                }
+                else if (user.CurrentView.Date == DateTime.Now.Date.AddDays(-1))
                 {
                     prefix = "Yesterday";
                 }
                 else
                 {
-                    prefix = user.CurrentView.Date.DayOfWeek.ToString();
+                    prefix = user.CurrentView.Date.DayOfWeek.ToString() + " (" + user.CurrentView.Month + "/" + user.CurrentView.Day + ")";
                 }
-
-                date = user.CurrentView.ToShortDateString();
             }
         }
         <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-tabs">
@@ -94,7 +100,7 @@
                     {
                         <div class="mdl-select">
                             <select class="mdl-select-text" id="child-select">
-                                <option class="hidden" selected disabled value="@(data.FirstOrDefault(c => c.IsSelected).Id)">@(data.FirstOrDefault(c => c.IsSelected).Name)</option>
+                                <option class="hidden" selected disabled value="@(user.ChildId)">@((await dbContext.Children.FirstOrDefaultAsync(a => a.Id == user.ChildId)).Name)</option>
                                 @for (int i = 0; i < data.Count; i++)
                                 {
                                     <option value="@i">@data[i].Name</option>
@@ -110,7 +116,7 @@
                         var rv = ViewContext.RouteData.Values.FirstOrDefault().Value.ToString();
                     }
 
-                    <a asp-page="Today" class="mdl-layout__tab @(rv == "/Today" ? "is-active" : "")">@prefix @(date != "" ? "(" + date + ")" : "")</a>
+                    <a asp-page="Today" class="mdl-layout__tab @(rv == "/Today" ? "is-active" : "")">@prefix</a>
                     <a asp-page="History" class="mdl-layout__tab @(rv == "/History" ? "is-active" : "")">History</a>
                     <a asp-page="Settings" class="mdl-layout__tab @(rv == "/Settings" ? "is-active" : "")">Settings</a>
                 </div>

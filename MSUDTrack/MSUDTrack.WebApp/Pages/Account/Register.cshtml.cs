@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using MSUDTrack.DataModels.Models;
 using MSUDTrack.Services;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -55,6 +56,9 @@ namespace MSUDTrack.WebApp.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+            [Required]
+            [Display(Name = "Your last name")]
+            public string LastName { get; set; }
         }
 
         public void OnGet(string returnUrl = null)
@@ -67,7 +71,15 @@ namespace MSUDTrack.WebApp.Pages.Account
             ReturnUrl = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = Input.Username, Email = Input.Email };
+
+                var family = _context.Families.Add(new Family()
+                {
+                    Created = DateTime.Now,
+                    LastName = Input.LastName,
+                    Id = Guid.NewGuid().ToString()
+                });
+
+                var user = new ApplicationUser { UserName = Input.Username, Email = Input.Email, FamilyId = family.Entity.Id };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {

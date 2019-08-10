@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MSUDTrack.DataModels.Models;
@@ -15,10 +16,12 @@ namespace MSUDTrack.WebApp.Controllers
     public class ChildrenController : ControllerBase
     {
         private readonly ChildrensService _childrensService;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public ChildrenController(ChildrensService childrensService)
+        public ChildrenController(ChildrensService childrensService, UserManager<ApplicationUser> userManager)
         {
             _childrensService = childrensService;
+            this.userManager = userManager;
         }
 
         // GET: api/Children/5
@@ -29,11 +32,19 @@ namespace MSUDTrack.WebApp.Controllers
             foreach (var child in children)
             {
                 if (id == child.Name)
-                    child.IsSelected = true;
-                else
-                    child.IsSelected = false;
+                {
+                    var user = await userManager.GetUserAsync(User);
+                    user.ChildId = child.Id;
+                    await userManager.UpdateAsync(user);
+                }
+                //else
+                //{
+                //    var user = await userManager.GetUserAsync(User);
+                //    user.ChildId = ;
+                //    await userManager.UpdateAsync(user);
+                //}
 
-                await _childrensService.UpdateAsync(child, child.Id);
+                //await _childrensService.UpdateAsync(child, child.Id);
             }
 
             return "Success";

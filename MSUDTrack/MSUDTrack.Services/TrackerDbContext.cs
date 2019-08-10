@@ -13,6 +13,7 @@ namespace MSUDTrack.Services
         public virtual DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
         public virtual DbSet<Child> Children { get; set; }
+        public virtual DbSet<Family> Families { get; set; }
         public virtual DbSet<Food> Foods { get; set; }
         public virtual DbSet<Period> Period { get; set; }
         public virtual DbSet<Record> Records { get; set; }
@@ -40,6 +41,15 @@ namespace MSUDTrack.Services
                 entity.Property(e => e.Birthday).HasColumnName("birthday");
 
                 entity.Property(e => e.IsActive).HasColumnName("is_active");
+            });
+
+            modelBuilder.Entity<Family>(entity =>
+            {
+                entity.ToTable("families");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedNever();
             });
 
             modelBuilder.Entity<Food>(entity =>

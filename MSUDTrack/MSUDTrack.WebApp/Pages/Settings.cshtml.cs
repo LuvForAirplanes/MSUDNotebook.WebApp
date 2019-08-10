@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using MSUDTrack.DataModels.Models;
 using MSUDTrack.Services;
 
@@ -14,10 +16,12 @@ namespace MSUDTrack.WebApp.Pages
     public class SettingsModel : PageModel
     {
         private readonly ChildrensService _childrensService;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public SettingsModel(ChildrensService childrensService)
+        public SettingsModel(ChildrensService childrensService, UserManager<ApplicationUser> userManager)
         {
             _childrensService = childrensService;
+            this.userManager = userManager;
         }
 
         [BindProperty]
@@ -25,32 +29,44 @@ namespace MSUDTrack.WebApp.Pages
         [BindProperty]
         public Child NewChild { get; set; } = new Child() { Id = Guid.NewGuid().ToString(), IsActive = true, Birthday = new DateTime(2010, 1, 1) };
 
-        public void OnGet()
+        public async Task OnGetAsync()
         {
-            Children = _childrensService.Get().ToList();
+            var user = await userManager.GetUserAsync(User);
+
+            Children = await _childrensService.GetChildrenForFamilyAsync(user.FamilyId);
         }
 
-        public void InitData()
+        public async Task InitDataAsync()
         {
+            var user = await userManager.GetUserAsync(User);
             ModelState.Clear();
 
-            NewChild = new Child() { Id = Guid.NewGuid().ToString(), IsActive = true, IsSelected = true, Birthday = new DateTime(2010, 1, 1) };
-            Children = _childrensService.Get().ToList();
+            NewChild = new Child() { Id = Guid.NewGuid().ToString(), IsActive = true, Birthday = new DateTime(2010, 1, 1) };
+            Children = await _childrensService.GetChildrenForFamilyAsync(user.FamilyId);
         }
 
         public async Task OnPostAddChildAsync()
         {
-            NewChild.IsSelected = true;
-            await _childrensService.CreateAsync(NewChild);
+            var user = await userManager.GetUserAsync(User);
 
-            InitData();
+            user.ChildId = NewChild.Id;
+            NewChild.FamilyId = user.FamilyId;
+
+            await _childrensService.CreateAsync(NewChild);
+            await userManager.UpdateAsync(user);
+
+            InitDataAsync();
         }
 
         public async Task OnPostDeleteChildAsync(string id)
         {
+            var user = await userManager.GetUserAsync(User);
+            user.ChildId = null;
+            await userManager.UpdateAsync(user);
+
             await _childrensService.DeleteAsync(id);
 
-            InitData();
+            InitDataAsync();
         }
     }
 }
