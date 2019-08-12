@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MSUDTrack.DataModels.Models;
 using MSUDTrack.Services;
+using NinjaNye.SearchExtensions;
 
 namespace MSUDTrack.WebApp.Controllers
 {
@@ -26,13 +27,14 @@ namespace MSUDTrack.WebApp.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Food>>> GetFood(string query, int page_limit)
         {
+            var search = query.ToLower().Split(" ");
+
             return await _foodsService.Get()
-                .Where(f => (f.Name 
-                    .ToLower() + " " + f.Manufacturer.ToLower())
-                    .ContainsAny(query.ToLower().Split(' ', StringSplitOptions.None)))
+                .Search(x => x.Name.ToLower(),
+                        x => x.Manufacturer.ToLower())
+                .Containing(search)
+                .OrderBy(f => f.LastUsed).ThenBy(f => f.TimesUsed)
                 .Take(page_limit)
-                .OrderBy(f => f.LastUsed)
-                .OrderBy(f => f.TimesUsed)
                 .ToListAsync();
         }
     }
