@@ -27,6 +27,10 @@
     .mdl-button {
         width:260px;
     }
+
+    button:last-child {
+        margin-top:10px;
+    }
 </style>
 <form asp-route-returnUrl="@Model.ReturnUrl" method="post" class="ui form">
     <div asp-validation-summary="All" class="text-danger"></div>
@@ -60,6 +64,10 @@
                         </div>
                         <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
                             Save
+                        </button>
+                        <br />
+                        <button asp-page-handler="" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" onclick="window.location.href = '/account/login';return false;">
+                            Login
                         </button>
                     </div>
                 </div>
