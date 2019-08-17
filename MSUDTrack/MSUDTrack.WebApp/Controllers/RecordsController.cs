@@ -73,8 +73,8 @@ namespace MSUDTrack.WebApp.Controllers
             }
 
             var user = await _userManager.GetUserAsync(User);
-            var updated = await _recordsService.UpdateAsync(newRecord);
-            var child = _childrensService.GetCurrentChild();
+            var updated = await _recordsService.UpdateAsync(newRecord, user);
+            var child = _childrensService.Get().Where(c => c.Id == user.ChildId).FirstOrDefault();
             var leucineTotal = _recordsService.Get().Where(r => r.Created.Date == user.CurrentView.Date).Sum(r => r.LeucineMilligrams).Value;
 
             return new ReturnRecord()
@@ -108,17 +108,13 @@ namespace MSUDTrack.WebApp.Controllers
         [HttpPut("{periodId}")]
         public async Task<ActionResult<Record>> PutRecord(string periodId)
         {
-            if ((await _userManager.GetUserAsync(User)).CurrentView.Date != DateTime.Now.Date)
-            {
-                ModelState.Clear();
-                return RedirectToPage("/Today");
-            }
+            var user = await _userManager.GetUserAsync(User);
 
             return await _recordsService.CreateAsync(new Record()
             {
                 Id = Guid.NewGuid().ToString(),
                 PeriodId = periodId,
-                ChildId = _childrensService.GetCurrentChild().Id,
+                ChildId = _childrensService.Get().Where(c => c.Id == user.ChildId).FirstOrDefault().Id,
                 Created = DateTime.Now
             });
         }

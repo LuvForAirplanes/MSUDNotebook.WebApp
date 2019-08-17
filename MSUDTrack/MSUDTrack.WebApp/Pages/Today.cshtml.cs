@@ -20,13 +20,15 @@ namespace MSUDTrack.WebApp.Pages
         private readonly PeriodsService _periodsService;
         private readonly FoodsService _foodsService;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ChildrensService childrensService;
 
-        public TodayModel(RecordsService recordsService, PeriodsService periodsService, UserManager<ApplicationUser> userManager, FoodsService foodsService)
+        public TodayModel(RecordsService recordsService, PeriodsService periodsService, UserManager<ApplicationUser> userManager, FoodsService foodsService, ChildrensService childrensService)
         {
             _recordsService = recordsService;
             _periodsService = periodsService;
             _userManager = userManager;
             _foodsService = foodsService;
+            this.childrensService = childrensService;
         }
 
         public TodayDTO TodaysLog { get; set; } = new TodayDTO();
@@ -36,17 +38,37 @@ namespace MSUDTrack.WebApp.Pages
 
         public async Task<IActionResult> OnGetAsync()
         {
+            var user = await _userManager.GetUserAsync(User);
+
+            if (string.IsNullOrEmpty(user.ChildId))
+                return RedirectToPage("/Settings");
+
             ModelState.Clear();
             await LoadData();
-
-            if (TodaysLog.Child == null)
-                return RedirectToPage("/Settings");
 
             return Page();
         }
 
+        public async Task<IActionResult> OnPostAddRecordAsync(string periodId, string childId)
+        {
+            await _recordsService.CreateAsync(new Record()
+            {
+                Id = Guid.NewGuid().ToString(),
+                ChildId = childId,
+                PeriodId = periodId,
+                Created = DateTime.Now
+            });
+
+            await LoadData();
+            ModelState.Clear();
+            return RedirectToPage("/Today");
+        }
+
         public async Task<IActionResult> OnPostNewFoodAsync()
         {
+            var user = await _userManager.GetUserAsync(User);
+            var currentChild = childrensService.Get().Where(c => c.Id == user.ChildId).FirstOrDefault();
+
             Food.Name = Food.Name.Transform(To.TitleCase);
 
             await _foodsService.CreateAsync(new Food()
@@ -76,7 +98,7 @@ namespace MSUDTrack.WebApp.Pages
                 WeightGrams = Food.ServingGrams
             };
 
-            await _recordsService.UpdateAsync(newRecord);
+            await _recordsService.UpdateAsync(newRecord, user);
 
             await LoadData();
             ModelState.Clear();

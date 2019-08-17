@@ -36,14 +36,14 @@ namespace MSUDTrack.Services
                 });
             }
 
-            log.Child = _childrensService.Get().Where(c => c.IsSelected).FirstOrDefault();
+            log.Child = _childrensService.Get().Where(c => c.Id == user.ChildId).FirstOrDefault();
 
             return log;
         }
 
         public async Task<List<Record>> GetRecordsByPeriodAsync(string periodId, ApplicationUser user)
         {
-            var child = _childrensService.Get().Where(c => c.IsSelected).FirstOrDefault();
+            var child = _childrensService.Get().Where(c => c.Id == user.ChildId).FirstOrDefault();
             var period = await _periodsService.Get().Where(p => p.Id == periodId).FirstOrDefaultAsync();
             var records = new List<Record>();
 
@@ -60,17 +60,17 @@ namespace MSUDTrack.Services
             return records;
         }
 
-        public override async Task<Record> CreateAsync(Record record, bool saveNow = true)
+        public async Task<Record> CreateAsync(Record record, ApplicationUser user, bool saveNow = true)
         {
-            return await base.CreateAsync(await ParseRecordAsync(record), saveNow);
+            return await base.CreateAsync(await ParseRecordAsync(record, user), saveNow);
         }
 
-        public async Task<Record> UpdateAsync(Record record, bool saveNow = true)
+        public async Task<Record> UpdateAsync(Record record, ApplicationUser user, bool saveNow = true)
         {
-            return await base.UpdateAsync(await ParseRecordAsync(record), record.Id, saveNow);
+            return await base.UpdateAsync(await ParseRecordAsync(record, user), record.Id, saveNow);
         }
 
-        public async Task<Record> ParseRecordAsync(Record record)
+        public async Task<Record> ParseRecordAsync(Record record, ApplicationUser user)
         {
             if (!string.IsNullOrEmpty(record.Name))
             {
@@ -78,7 +78,7 @@ namespace MSUDTrack.Services
 
                 if ((record.LeucineMilligrams == null || record.ProteinGrams != existing.ProteinGrams) && record.WeightGrams != null)
                 {
-                    var child = _childrensService.GetCurrentChild();
+                    var child = _childrensService.Get().Where(c => c.Id == user.ChildId).FirstOrDefault();
 
                     var multiple = record.WeightGrams / existing.WeightGrams;
                     var newProtein = multiple * record.ProteinGrams;
@@ -95,7 +95,7 @@ namespace MSUDTrack.Services
                 }
                 else if ((record.ProteinGrams == null || record.LeucineMilligrams != existing.LeucineMilligrams) && record.WeightGrams != null)
                 {
-                    var child = _childrensService.GetCurrentChild();
+                    var child = _childrensService.Get().Where(c => c.Id == user.ChildId).FirstOrDefault();
 
                     var multiple = record.WeightGrams / existing.WeightGrams;
                     var newLeucine = multiple * record.LeucineMilligrams;
@@ -113,7 +113,7 @@ namespace MSUDTrack.Services
                 }
                 else if(record.WeightGrams != existing.WeightGrams)
                 {
-                    var child = _childrensService.GetCurrentChild();
+                    var child = _childrensService.Get().Where(c => c.Id == user.ChildId).FirstOrDefault();
 
                     var multiple = record.WeightGrams / existing.WeightGrams;
                     var newLeucine = multiple * record.LeucineMilligrams;

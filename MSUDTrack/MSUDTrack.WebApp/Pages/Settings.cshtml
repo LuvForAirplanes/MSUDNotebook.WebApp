@@ -1,7 +1,11 @@
 ﻿@page
 @model MSUDTrack.WebApp.Pages.SettingsModel
+@inject  UserManager<MSUDTrack.DataModels.Models.ApplicationUser> userManager;
+@inject MSUDTrack.Services.TrackerDbContext context;
 @{
     ViewData["Title"] = "Settings";
+    var user = await userManager.GetUserAsync(User);
+    var family = context.Families.FirstOrDefault(f => f.Id == user.FamilyId);
 }
 
 @section  Styles {
@@ -14,17 +18,32 @@
         .inputs:nth-child(2) {
             width: 120px;
         }
+
+        h2 {
+            margin-bottom:0;
+        }
+
+        .mdl-list{
+            padding-top:0;
+        }
     </style>
 }
 
 <form method="post">
+    <input asp-for="NewChild.LeucineMultiple" type="hidden" />
+    <input asp-for="NewChild.LeucineDailyCount" type="hidden" />
     <section class="mdl-layout__tab-panel is-active">
         <div class="page-content flex-column">
             @*<div class="flex flex-grow-1 justify-content-center">
-                <select style="margin-top:10px">
-                    <option>Purple - Red</option>
-                </select>
-            </div>*@
+                    <select style="margin-top:10px">
+                        <option>Purple - Red</option>
+                    </select>
+                </div>*@
+            <div class="flex flex-grow-1 justify-content-center">
+                <h2>
+                    The @family.LastName's
+                </h2>
+            </div>
             <div class="flex flex-grow-1 justify-content-center">
                 <ul class="demo-list-control mdl-list">
                     @for (int i = 0; i < Model.Children.Count; i++)
@@ -56,17 +75,19 @@
             </div>
             @if (Model.Children.Count > 0)
             {
+                var child = context.Children.FirstOrDefault(c => c.Id == user.ChildId);
+
                 <div class="flex flex-grow-1 justify-content-center">
                     <div class="flex-row">
                         <div class="flex-grow-1 inputs">
                             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                <input class="mdl-textfield__input" type="number" id="leucine_exchange" value="@Model.Children.FirstOrDefault(c => c.IsSelected).LeucineMultiple" />
+                                <input class="mdl-textfield__input" type="number" id="leucine_exchange" value="@child.LeucineMultiple" />
                                 <label class="mdl-textfield__label" for="leucine_exchange">Leucine Exchange</label>
                             </div>
                         </div>
                         <div class="flex-grow-1 inputs">
                             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                <input class="mdl-textfield__input" type="number" id="leucine_daily_count" value="@Model.Children.FirstOrDefault(c => c.IsSelected).LeucineDailyCount" />
+                                <input class="mdl-textfield__input" type="number" id="leucine_daily_count" value="@child.LeucineDailyCount" />
                                 <label class="mdl-textfield__label" for="leucine_exchange">Leucine Daily Count</label>
                             </div>
                         </div>
@@ -97,7 +118,6 @@
                 </p>
                 <input type="hidden" asp-for="NewChild.Id" />
                 <input type="hidden" asp-for="NewChild.IsActive" />
-                <input type="hidden" asp-for="NewChild.IsSelected" />
                 <input type="hidden" asp-for="NewChild.Created" />
                 <input type="hidden" asp-for="NewChild.Updated" />
                 <div>

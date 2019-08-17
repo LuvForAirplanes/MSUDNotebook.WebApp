@@ -1,4 +1,5 @@
 ﻿using MSUDTrack.DataModels.Models;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,9 +9,9 @@ namespace MSUDTrack.Services
     {
         public ChildrensService(TrackerDbContext context) : base(context) { }
 
-        public Child GetCurrentChild()
+        public async Task<List<Child>> GetChildrenForFamilyAsync(string familyId)
         {
-            return Get().FirstOrDefault(c => c.IsSelected);
+            return _context.Children.Where(c => c.FamilyId == familyId).ToList();
         }
     }
 }
