@@ -28,8 +28,13 @@
         width:260px;
     }
 
-    button:last-child {
+    button:last-of-type {
         margin-top:10px;
+    }
+
+    .align-text-center {
+        padding-top:20px;
+        padding-right:10px;
     }
 </style>
 <form asp-route-returnUrl="@Model.ReturnUrl" method="post" class="ui form">
@@ -69,6 +74,9 @@
                         <button asp-page-handler="" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" onclick="window.location.href = '/account/login';return false;">
                             Login
                         </button>
+                        <div class="align-text-center">
+                            <a href="https://msudnotebook.support/">Visit Support Website</a>
+                        </div>
                     </div>
                 </div>
             </div>

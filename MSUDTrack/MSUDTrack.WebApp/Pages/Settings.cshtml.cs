@@ -27,7 +27,7 @@ namespace MSUDTrack.WebApp.Pages
         [BindProperty]
         public List<Child> Children { get; set; } = new List<Child>();
         [BindProperty]
-        public Child NewChild { get; set; } = new Child() { Id = Guid.NewGuid().ToString(), IsActive = true, Birthday = new DateTime(2010, 1, 1) };
+        public Child NewChild { get; set; } = new Child() { Id = Guid.NewGuid().ToString(), IsActive = true, Birthday = new DateTime(2010, 1, 1), LeucineDailyCount = 500, LeucineMultiple = 100 };
 
         public async Task OnGetAsync()
         {
@@ -41,7 +41,7 @@ namespace MSUDTrack.WebApp.Pages
             var user = await userManager.GetUserAsync(User);
             ModelState.Clear();
 
-            NewChild = new Child() { Id = Guid.NewGuid().ToString(), IsActive = true, Birthday = new DateTime(2010, 1, 1) };
+            NewChild = new Child() { Id = Guid.NewGuid().ToString(), IsActive = true, Birthday = new DateTime(2010, 1, 1), LeucineDailyCount = 500, LeucineMultiple = 100 };
             Children = await _childrensService.GetChildrenForFamilyAsync(user.FamilyId);
         }
 

@@ -4,6 +4,8 @@
 @inject MSUDTrack.Services.TrackerDbContext context;
 @{
     ViewData["Title"] = "Settings";
+    var user = await userManager.GetUserAsync(User);
+    var family = context.Families.FirstOrDefault(f => f.Id == user.FamilyId);
 }
 
 @section  Styles {
@@ -16,17 +18,32 @@
         .inputs:nth-child(2) {
             width: 120px;
         }
+
+        h2 {
+            margin-bottom:0;
+        }
+
+        .mdl-list{
+            padding-top:0;
+        }
     </style>
 }
 
 <form method="post">
+    <input asp-for="NewChild.LeucineMultiple" type="hidden" />
+    <input asp-for="NewChild.LeucineDailyCount" type="hidden" />
     <section class="mdl-layout__tab-panel is-active">
         <div class="page-content flex-column">
             @*<div class="flex flex-grow-1 justify-content-center">
-                <select style="margin-top:10px">
-                    <option>Purple - Red</option>
-                </select>
-            </div>*@
+                    <select style="margin-top:10px">
+                        <option>Purple - Red</option>
+                    </select>
+                </div>*@
+            <div class="flex flex-grow-1 justify-content-center">
+                <h2>
+                    The @family.LastName's
+                </h2>
+            </div>
             <div class="flex flex-grow-1 justify-content-center">
                 <ul class="demo-list-control mdl-list">
                     @for (int i = 0; i < Model.Children.Count; i++)
@@ -58,9 +75,8 @@
             </div>
             @if (Model.Children.Count > 0)
             {
-                        var user = await userManager.GetUserAsync(User);
-                        var child = context.Children.FirstOrDefault(c => c.Id == user.ChildId); 
-        
+                var child = context.Children.FirstOrDefault(c => c.Id == user.ChildId);
+
                 <div class="flex flex-grow-1 justify-content-center">
                     <div class="flex-row">
                         <div class="flex-grow-1 inputs">
