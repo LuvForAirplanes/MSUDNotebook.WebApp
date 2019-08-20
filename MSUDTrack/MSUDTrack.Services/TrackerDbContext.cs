@@ -111,7 +111,8 @@ namespace MSUDTrack.Services
                 entity.HasOne(p => p.Child)
                     .WithMany()
                     .HasForeignKey(d => d.ChildId)
-                    .HasConstraintName("records_childid_fkey");
+                    .HasConstraintName("records_childid_fkey")
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasOne(p => p.Period)
                     .WithMany()

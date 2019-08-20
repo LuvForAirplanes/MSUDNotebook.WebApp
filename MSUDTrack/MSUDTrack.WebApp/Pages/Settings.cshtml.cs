@@ -29,6 +29,9 @@ namespace MSUDTrack.WebApp.Pages
         [BindProperty]
         public Child NewChild { get; set; } = new Child() { Id = Guid.NewGuid().ToString(), IsActive = true, Birthday = new DateTime(2010, 1, 1), LeucineDailyCount = 500, LeucineMultiple = 100 };
 
+        [BindProperty]
+        public string ChildDeleteId { get; set; }
+
         public async Task OnGetAsync()
         {
             var user = await userManager.GetUserAsync(User);
@@ -55,18 +58,37 @@ namespace MSUDTrack.WebApp.Pages
             await _childrensService.CreateAsync(NewChild);
             await userManager.UpdateAsync(user);
 
-            InitDataAsync();
+            await InitDataAsync();
         }
 
-        public async Task OnPostDeleteChildAsync(string id)
+        public async Task<IActionResult> OnPostDeleteChildAsync(string id)
         {
             var user = await userManager.GetUserAsync(User);
-            user.ChildId = null;
-            await userManager.UpdateAsync(user);
+            var children = await _childrensService.GetChildrenForFamilyAsync(user.FamilyId);
 
-            await _childrensService.DeleteAsync(id);
+            //if there won't be any left...
+            if (children.Count == 1)
+            {
+                await InitDataAsync();
+                return Page();
+            }
 
-            InitDataAsync();
+            if(!string.IsNullOrEmpty(ChildDeleteId))
+            {
+                user.ChildId = children.FirstOrDefault(c => c.Id != id).Id;
+                await userManager.UpdateAsync(user);
+
+                await _childrensService.DeleteAsync(ChildDeleteId);
+
+                ChildDeleteId = "";
+            }
+            else
+            {
+                ChildDeleteId = id;
+            }
+
+            await InitDataAsync();
+            return Page();
         }
     }
 }

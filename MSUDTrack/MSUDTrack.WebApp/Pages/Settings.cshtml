@@ -1,6 +1,6 @@
 ﻿@page
 @model MSUDTrack.WebApp.Pages.SettingsModel
-@inject  UserManager<MSUDTrack.DataModels.Models.ApplicationUser> userManager;
+@inject UserManager<MSUDTrack.DataModels.Models.ApplicationUser> userManager;
 @inject MSUDTrack.Services.TrackerDbContext context;
 @{
     ViewData["Title"] = "Settings";
@@ -8,11 +8,11 @@
     var family = context.Families.FirstOrDefault(f => f.Id == user.FamilyId);
 }
 
-@section  Styles {
+@section Styles {
     <style>
         .inputs:nth-child(1) {
             width: 100px;
-            padding-right:20px;
+            padding-right: 20px;
         }
 
         .inputs:nth-child(2) {
@@ -20,11 +20,11 @@
         }
 
         h2 {
-            margin-bottom:0;
+            margin-bottom: 0;
         }
 
-        .mdl-list{
-            padding-top:0;
+        .mdl-list {
+            padding-top: 0;
         }
     </style>
 }
@@ -32,6 +32,7 @@
 <form method="post">
     <input asp-for="NewChild.LeucineMultiple" type="hidden" />
     <input asp-for="NewChild.LeucineDailyCount" type="hidden" />
+    <input asp-for="ChildDeleteId" type="hidden" />
     <section class="mdl-layout__tab-panel is-active">
         <div class="page-content flex-column">
             @*<div class="flex flex-grow-1 justify-content-center">
@@ -69,7 +70,7 @@
                         <button id="@Model.Children[i].Id" class="mdl-button close" style="display: none;" asp-page-handler="DeleteChild" asp-route-id="@Model.Children[i].Id">Cancel</button>
                     }
                     <li class="mdl-list__item mdl-list__item--two-line">
-                        <input type="button" class="mdl-button mdl-js-button mdl-button--primary add-button" onclick="showDiag()" asp-page-handler="" value="Add Person" />
+                        <input type="button" class="mdl-button mdl-js-button mdl-button--primary add-child-button" onclick="showDiag()" value="Add Person" />
                     </li>
                 </ul>
             </div>
@@ -110,7 +111,7 @@
             </div>
         </div>
 
-        <dialog class="mdl-dialog">
+        <dialog class="mdl-dialog" id="add-dialog">
             <h4 class="mdl-dialog__title">Add Child</h4>
             <div class="mdl-dialog__content">
                 <p>
@@ -134,23 +135,50 @@
                 <button type="button" class="mdl-button close">Cancel</button>
             </div>
         </dialog>
+        <dialog class="mdl-dialog" id="delete-child">
+            <h4 class="mdl-dialog__title">Delete Child?</h4>
+            <div class="mdl-dialog__content">
+                <p>
+                    Deleting this child will remove all their records from the database.
+                </p>
+            </div>
+            <div class="mdl-dialog__actions">
+                <button class="mdl-button" asp-page-handler="DeleteChild">Delete</button>
+                <button type="button" id="close-delete-child" class="mdl-button close">Cancel</button>
+            </div>
+        </dialog>
     </section>
 </form>
 
 @section Scripts  {
     <script>
-        var dialog = document.querySelector('dialog');
+            //add child
+            var add_child = document.getElementById('add-dialog');
 
-        if (!dialog.showModal) {
-            dialogPolyfill.registerDialog(dialog);
-        }
+            if (!add_child.showModal) {
+                dialogPolyfill.registerDialog(add_child);
+            }
 
-        dialog.querySelector('.close').addEventListener('click', function () {
-            dialog.close();
-        });
+            add_child.querySelector('.close').addEventListener('click', function () {
+                add_child.close();
+            });
 
-        function showDiag() {
-            dialog.showModal();
-        }
+            function showDiag() {
+                add_child.showModal();
+            }
+
+            //delete child
+            var delete_child = document.getElementById('delete-child');
+
+            if (!delete_child.showModal) {
+                dialogPolyfill.registerDialog(delete_child);
+            }
+
+            delete_child.querySelector("#close-delete-child").addEventListener('click', function () {
+                delete_child.close();
+            });
+
+            @(!string.IsNullOrEmpty(Model.ChildDeleteId) ? "delete_child.showModal();" : "")
     </script>
+
 }
