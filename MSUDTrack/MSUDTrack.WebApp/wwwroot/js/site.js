@@ -10,9 +10,9 @@ $(document).ready(function () {
 
         var food = {
             Id: targetId,
-            ProteinGrams: elements[3].value,
-            LeucineMilligrams: elements[4].value,
-            WeightGrams: elements[5].value
+            WeightGrams: elements[0].value,
+            LeucineMilligrams: elements[5].value,
+            ProteinGrams: elements[4].value
         };
 
         if (food.ProteinGrams === "" && food.LeucineMilligrams === "" || food.WeightGrams === "")
@@ -25,9 +25,9 @@ $(document).ready(function () {
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             success: function (data) {
-                elements[3].value = data.proteinGrams;
-                elements[4].value = data.leucineMilligrams;
-                elements[5].value = data.weightGrams;
+                elements[0].value = data.weightGrams;
+                elements[5].value = data.leucineMilligrams;
+                elements[4].value = data.proteinGrams;
                 $("#total-mg").text(data.luecineCount);
                 $("#left-mg").text(data.leucineLeft);
             }
@@ -96,7 +96,7 @@ $(document).ready(function () {
                 var id = this.$input.context.className.split(' ')[1];
 
                 //get adjacent div
-                var div = $("." + id)[1].children[0];
+                var div = $("." + id)[2].children[0];
                 var input = div.children[0];
 
                 //set required attributes
@@ -117,13 +117,13 @@ $(document).ready(function () {
         var targetId = $(this).attr('class').split(' ')[1];
         var elements = $("." + targetId);
 
-        if (elements[0].value === "") {
+        if (elements[1].value === "") {
             return;
         }
 
         var record = {
             Id: targetId,
-            FoodId: elements[0].value
+            FoodId: elements[1].value
         };
 
         $.ajax({

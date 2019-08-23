@@ -27,22 +27,23 @@
             padding: 0 !important;
         }
 
-        td:nth-child(2) > input {
-            width: 40px;
-            border: none;
-        }
+            td:nth-child(1) > input {
+                width: 35px;
+                border: none;
+                padding-left:5px;
+            }
 
-        td:nth-child(3) > input {
-            width: 40px;
-            border: none;
-        }
+            td:nth-child(3) > input {
+                width: 30px;
+                border: none;
+            }
 
-        td:nth-child(4) > input {
-            width: 30px;
-            border: none;
-        }
+            td:nth-child(4) > input {
+                width: 40px;
+                border: none;
+            }
 
-        .material-icons {
+        .delete {
             color: red !important;
             font-size: 20px !important;
         }
@@ -64,11 +65,19 @@
         }
 
         .new-food-inputs {
-            width:40px;
+            width: 40px;
         }
 
         .new-food-name {
-            width:300px;
+            width: 300px;
+        }
+
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            margin: 0; 
         }
     </style>
 }
@@ -123,6 +132,9 @@
                         {
                             <tr>
                                 <td class="mdl-data-table__cell--non-numeric">
+                                    <input type="number" placeholder="W. g" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].WeightGrams" />
+                                </td>
+                                <td class="mdl-data-table__cell--non-numeric">
                                     <select class="food-select @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].Name">
                                         @if (Model.TodaysLog.Periods[i].Records[ii].Name == null)
                                         {
@@ -141,11 +153,8 @@
                                     <input type="number" placeholder="L. mg" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].LeucineMilligrams" />
                                 </td>
                                 <td>
-                                    <input type="number" placeholder="W. g" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].WeightGrams" />
-                                </td>
-                                <td>
                                     <button type="submit" class="delete-button @Model.TodaysLog.Periods[i].Records[ii].Id mdl-button mdl-js-button mdl-button--icon" asp-page-handler="DeleteRecord" asp-route-recordId="@Model.TodaysLog.Periods[i].Records[ii].Id">
-                                        <i class="material-icons">delete</i>
+                                        <i class="material-icons delete">delete</i>
                                     </button>
                                 </td>
                             </tr>

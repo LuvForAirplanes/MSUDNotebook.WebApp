@@ -67,80 +67,117 @@
     </style>
     @RenderSection("Styles", required: false)
 </head>
-    <body>
-        @{
-            var data = new List<MSUDTrack.DataModels.Models.Child>();
-            if(user != null)
+<body>
+    @{
+        var data = new List<MSUDTrack.DataModels.Models.Child>();
+        if (user != null)
+        {
+            data = dbContext.Families.Where(c => c.Id == user.FamilyId).Include(f => f.Children).FirstOrDefault().Children.ToList();
+        }
+
+        var prefix = "Today";
+
+        if (user != null)
+        {
+            if (user.CurrentView.Date == DateTime.Now.Date)
             {
-                data = dbContext.Families.Where(c => c.Id == user.FamilyId).Include(f => f.Children).FirstOrDefault().Children.ToList();
+                prefix = "Today";
             }
-
-            var prefix = "Today";
-
-            if(user != null)
+            else if (user.CurrentView.Date == DateTime.Now.Date.AddDays(-1))
             {
-                if(user.CurrentView.Date == DateTime.Now.Date)
-                {
-                    prefix = "Today";
-                }
-                else if (user.CurrentView.Date == DateTime.Now.Date.AddDays(-1))
-                {
-                    prefix = "Yesterday";
-                }
-                else
-                {
-                    prefix = user.CurrentView.Date.DayOfWeek.ToString() + " (" + user.CurrentView.Month + "/" + user.CurrentView.Day + ")";
-                }
+                prefix = "Yesterday";
+            }
+            else
+            {
+                prefix = user.CurrentView.Date.DayOfWeek.ToString() + " (" + user.CurrentView.Month + "/" + user.CurrentView.Day + ")";
             }
         }
-        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-tabs">
-            <header class="mdl-layout__header">
-                <div class="mdl-layout__header-row">
-                    <span class="mdl-layout-title">MSUD Notebook</span>
-                    @if (data.Count > 1)
-                    {
-                        <div class="mdl-select">
-                            <select class="mdl-select-text" id="child-select">
-                                <option class="hidden" selected disabled value="@(user.ChildId)">@((await dbContext.Children.FirstOrDefaultAsync(a => a.Id == user.ChildId)).Name)</option>
-                                @for (int i = 0; i < data.Count; i++)
-                                {
-                                    <option value="@i">@data[i].Name</option>
-                                }
-                            </select>
-                        </div>
-                    }
-                    <span class="mdl-select-highlight"></span>
-                    <span class="mdl-select-bar"></span>
+    }
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-tabs">
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row">
+                <span class="mdl-layout-title">MSUD Notebook</span>
+                @if (data.Count > 1)
+                {
+                    <div class="mdl-select">
+                        <select class="mdl-select-text" id="child-select">
+                            <option class="hidden" selected disabled value="@(user.ChildId)">@((await dbContext.Children.FirstOrDefaultAsync(a => a.Id == user.ChildId)).Name)</option>
+                            @for (int i = 0; i < data.Count; i++)
+                            {
+                                <option value="@i">@data[i].Name</option>
+                            }
+                        </select>
                     </div>
-                <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
-                    @{
-                        var rv = ViewContext.RouteData.Values.FirstOrDefault().Value.ToString();
-                    }
+                }
+                <span class="mdl-select-highlight"></span>
+                <span class="mdl-select-bar"></span>
+                <span class="mdl-layout-spacer"></span>
+                <nav class="mdl-navigation">
+                    <a class="mdl-navigation__link" onclick="showHelpDiag()">
+                        <i class="material-icons">help</i>
+                    </a>
+                </nav>
+            </div>
+            <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+                @{
+                    var rv = ViewContext.RouteData.Values.FirstOrDefault().Value.ToString();
+                }
 
-                    <a asp-page="Today" class="mdl-layout__tab @(rv == "/Today" ? "is-active" : "")">@prefix</a>
-                    <a asp-page="History" class="mdl-layout__tab @(rv == "/History" ? "is-active" : "")">History</a>
-                    <a asp-page="Settings" class="mdl-layout__tab @(rv == "/Settings" ? "is-active" : "")">Settings</a>
-                </div>
-            </header>
-            <main class="mdl-layout__content">
-                @RenderBody()
-            </main>
+                <a asp-page="Today" class="mdl-layout__tab @(rv == "/Today" ? "is-active" : "")">@prefix</a>
+                <a asp-page="History" class="mdl-layout__tab @(rv == "/History" ? "is-active" : "")">History</a>
+                <a asp-page="Settings" class="mdl-layout__tab @(rv == "/Settings" ? "is-active" : "")">Settings</a>
+            </div>
+        </header>
+        <main class="mdl-layout__content">
+            @RenderBody()
+        </main>
+    </div>
+
+    <dialog class="mdl-dialog help-dialog">
+        <h4 class="mdl-dialog__title">Help</h4>
+        <div class="mdl-dialog__content">
+            <p>1. Touch a header to add a food.</p>
+            <p>2. Touch the dropdown, and start typing to search for a food.</p>
+            <p>-if the food you are looking for doesn't exist, touch "Add".</p>
+            <p>3. To adjust the weight, change the number to the left of the select.</p>
+            <p>4. To adjust protein amount, change the second to last number in the row.</p>
+            <p>5. To adjust leucine amount, change the last number in the row.</p>
         </div>
+        <div class="mdl-dialog__actions">
+            <button type="button" class="mdl-button close-help-dialog">OK</button>
+        </div>
+    </dialog>
 
-        <footer></footer>
 
-        <environment include="Development">
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.1/js/standalone/selectize.min.js"></script>
-            <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
-        </environment>
-        <environment exclude="Development">
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.1/js/standalone/selectize.min.js"></script>
-            <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
-        </environment>
-        <script src="~/js/site.js" asp-append-version="true"></script>
+    <footer></footer>
 
-        @RenderSection("Scripts", required: false)
-    </body>
+    <environment include="Development">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.1/js/standalone/selectize.min.js"></script>
+        <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.1/js/standalone/selectize.min.js"></script>
+        <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    </environment>
+    <script>
+            var helpDaig = document.querySelector('.help-dialog');
+
+            if (!helpDaig.showModal) {
+                dialogPolyfill.registerDialog(helpDaig);
+            }
+
+            helpDaig.querySelector('.close-help-dialog').addEventListener('click', function () {
+                helpDaig.close();
+            });
+
+            function showHelpDiag(e) {
+                helpDaig.showModal();
+            }
+    </script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @RenderSection("Scripts", required: false)
+</body>
 </html>
