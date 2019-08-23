@@ -136,12 +136,26 @@
     <dialog class="mdl-dialog help-dialog">
         <h4 class="mdl-dialog__title">Help</h4>
         <div class="mdl-dialog__content">
-            <p>1. Touch a header to add a food.</p>
-            <p>2. Touch the dropdown, and start typing to search for a food.</p>
-            <p>-if the food you are looking for doesn't exist, touch "Add".</p>
-            <p>3. To adjust the weight, change the number to the left of the select.</p>
-            <p>4. To adjust protein amount, change the second to last number in the row.</p>
-            <p>5. To adjust leucine amount, change the last number in the row.</p>
+            @if (rv == "/Today")
+            {
+                <p>1. Touch a header to add a food.</p>
+                <p>2. Touch the dropdown, and start typing to search for a food.</p>
+                <p>-if the food you are looking for doesn't exist, touch "Add".</p>
+                <p>3. To adjust the weight, change the number to the left of the select.</p>
+                <p>4. To adjust protein amount, change the second to last number in the row.</p>
+                <p>5. To adjust leucine amount, change the last number in the row.</p>
+            }
+            else if (rv == "/Settings")
+            {
+                <p>Click "Add Person" to add a person to your family.</p>
+                <p>Touch "Is Active" on a person to delete a person.</p>
+                <p>"Leucine Exchange" is the lecuine milligrams that should be exchanged for one gram of protein.</p>
+                <p>"Protein Daily Count" determines how much leucine (in milligrams) can be consumed per day.</p>
+            }
+            else if(rv == "/History")
+            {
+                <p>Click on a day to jump to that view. Previous days cannot be changed.</p>
+            }
         </div>
         <div class="mdl-dialog__actions">
             <button type="button" class="mdl-button close-help-dialog">OK</button>
