@@ -79,6 +79,10 @@
             appearance: none;
             margin: 0; 
         }
+
+        .selectize-control.single .selectize-input, .selectize-control.single .selectize-input > input {
+            width:100%!important;
+        }
     </style>
 }
 
@@ -132,13 +136,13 @@
                         {
                             <tr>
                                 <td class="mdl-data-table__cell--non-numeric">
-                                    <input type="number" placeholder="W. g" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].WeightGrams" />
+                                    <input type="number" @(string.IsNullOrEmpty(Model.TodaysLog.Periods[i].Records[ii].Name) ? "disabled" : "") placeholder="W. g" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].WeightGrams" />
                                 </td>
                                 <td class="mdl-data-table__cell--non-numeric">
                                     <select class="food-select @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].Name">
                                         @if (Model.TodaysLog.Periods[i].Records[ii].Name == null)
                                         {
-                                            <option value="" disabled selected>Select a food...</option>
+                                            <option value="" disabled selected>First, pick or add a food...</option>
                                         }
                                         @if (Model.TodaysLog.Periods[i].Records[ii].Name != null)
                                         {
@@ -147,10 +151,10 @@
                                     </select>
                                 </td>
                                 <td>
-                                    <input type="number" placeholder="P. g" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].ProteinGrams" />
+                                    <input type="number" @(string.IsNullOrEmpty(Model.TodaysLog.Periods[i].Records[ii].Name) ? "disabled" : "") placeholder="P. g" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].ProteinGrams" />
                                 </td>
                                 <td>
-                                    <input type="number" placeholder="L. mg" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].LeucineMilligrams" />
+                                    <input type="number" @(string.IsNullOrEmpty(Model.TodaysLog.Periods[i].Records[ii].Name) ? "disabled" : "") placeholder="L. mg" class="nutri-inputs @Model.TodaysLog.Periods[i].Records[ii].Id" value="@Model.TodaysLog.Periods[i].Records[ii].LeucineMilligrams" />
                                 </td>
                                 <td>
                                     <button type="submit" class="delete-button @Model.TodaysLog.Periods[i].Records[ii].Id mdl-button mdl-js-button mdl-button--icon" asp-page-handler="DeleteRecord" asp-route-recordId="@Model.TodaysLog.Periods[i].Records[ii].Id">
